@@ -1,0 +1,892 @@
+/* ==========================================================================
+   HOJA DE ESTILOS CSS - PORTAFOLIO CIBERPUNK CON MODAL Y DETALLES DE SEMANA
+   ========================================================================== */
+
+:root {
+  --primary-color: #00f3ff;
+  --bg-color: #02040a;
+  --glow-core: rgba(0, 243, 255, 0.95);
+  --glow-shadow: rgba(0, 243, 255, 0.4);
+  --glow-inset: rgba(0, 243, 255, 0.1);
+}
+
+body.glow-red {
+  --primary-color: #ff003c;
+  --glow-core: rgba(255, 0, 60, 0.95);
+  --glow-shadow: rgba(255, 0, 60, 0.4);
+  --glow-inset: rgba(255, 0, 60, 0.1);
+}
+
+/* REGLA GENERAL - CURSOR NORMAL */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  cursor: default;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: #fff;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+  cursor: default !important;
+}
+
+/* CURSOR INTERACTIVO PARA BOTONES Y ELEMENTOS CLICKEABLES */
+a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-back {
+  cursor: pointer !important;
+}
+
+/* LUZ/GLOW DINÁMICO ALREDEDOR DEL CURSOR */
+.cursor-glow {
+  position: fixed;
+  top: -150px; /* Oculta la luz fuera de la pantalla hasta que el mouse se mueva */
+  left: -150px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle, 
+    var(--glow-core) 0%, 
+    var(--glow-shadow) 30%, 
+    transparent 70%
+  );
+  pointer-events: none; /* Permite hacer clics sin interferir */
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  will-change: left, top;
+}
+
+/* FONDO ESPACIO ESTRELLADO CON MOVIMIENTO */
+.space-background {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100vw; 
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 230px 180px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 300px 80px, var(--primary-color), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 350px 240px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2.5px 2.5px at 420px 150px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 500px 310px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 580px 60px, #ffffff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 600px 400px;
+  animation: moveStars 60s linear infinite;
+  z-index: -2;
+}
+
+/* ANIMACIÓN DE MOVIMIENTO DE ESTRELLAS */
+@keyframes moveStars {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 600px 1200px;
+  }
+}
+
+/* HEADER FIJO (PEGAJOSO) */
+.header {
+  position: sticky;
+  top: 10px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-color);
+  margin-bottom: 30px;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+}
+
+.logo {
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-color);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn {
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 0 10px var(--primary-color);
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background-color: var(--primary-color);
+  color: #000;
+}
+
+/* ESPADA LÁSER */
+.lightsaber-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.saber-blade-v {
+  width: 8px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 0 4px #fff, 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+}
+
+.saber-hilt-v {
+  width: 12px;
+  height: 25px;
+  background: linear-gradient(180deg, #888, #222);
+}
+
+/* --- ESTRUCTURA DEL CUBO/PRISMA HOLOGRAMA 3D --- */
+.cube-container {
+  width: 100%;
+  height: 380px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1100px;
+  margin: 10px 0 20px 0;
+  position: relative;
+}
+
+.cube {
+  width: 440px;
+  height: 180px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 16s infinite linear;
+  transition: transform 0.5s ease;
+}
+
+.cube:hover {
+  animation-play-state: paused;
+}
+
+.cube-face {
+  position: absolute;
+  background: rgba(2, 8, 20, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-color), inset 0 0 15px var(--glow-inset);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 15px;
+  color: #fff;
+  border-radius: 4px;
+  backface-visibility: visible;
+}
+
+/* CARA FRONTAL Y TRASERA */
+.face-front, .face-back {
+  width: 440px;
+  height: 180px;
+}
+
+.face-front { transform: rotateY(0deg) translateZ(110px); }
+.face-back  { transform: rotateY(180deg) translateZ(110px); }
+
+/* CARAS LATERALES */
+.face-right, .face-left {
+  width: 220px;
+  height: 180px;
+}
+
+.face-right { transform: rotateY(90deg) translateZ(330px); }
+.face-left  { transform: rotateY(-90deg) translateZ(110px); }
+
+.face-right .side-text {
+  font-size: 0.85rem;
+  line-height: 1.3;
+  text-align: center;
+  font-weight: 800;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-color);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.face-left .side-text {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  text-align: center;
+  font-weight: 800;
+  color: var(--primary-color);
+  text-shadow: 0 0 8px var(--primary-color);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* BASE INFERIOR DEL CUBO */
+.face-bottom {
+  width: 440px;
+  height: 220px;
+  transform: rotateX(-90deg) translateZ(90px);
+}
+
+/* PLATAFORMA CENTRADA */
+.base-platform {
+  position: absolute;
+  width: 480px;
+  height: 240px;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color), inset 0 0 20px var(--glow-inset);
+  border-radius: 8px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(120px);
+  pointer-events: none;
+}
+
+@keyframes rotateCube {
+  0% { transform: rotateX(-18deg) rotateY(0deg); }
+  100% { transform: rotateX(-18deg) rotateY(360deg); }
+}
+
+/* TEXTOS DEL CUBO PRINCIPAL */
+.title { color: var(--primary-color); font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; text-shadow: 0 0 10px var(--primary-color); letter-spacing: 1px; }
+.subtitle { font-size: 0.85rem; color: #e2e8f0; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+
+/* CONTENIDO UPLA */
+.upla-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.upla-header {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-color);
+  letter-spacing: 1px;
+}
+
+.upla-img-logo {
+  height: 65px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px var(--primary-color));
+  margin: 4px 0;
+}
+
+.upla-footer {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 8px #fff;
+}
+
+/* PERFIL DE USUARIO */
+.profile-container { max-width: 900px; margin: 0 auto 40px; }
+.profile-card { background: rgba(5, 15, 35, 0.85); border: 2px solid var(--primary-color); box-shadow: 0 0 20px var(--primary-color); padding: 25px; border-radius: 12px; }
+.profile-header { display: flex; align-items: center; gap: 20px; }
+
+/* CONTENEDOR Y FOTO DE PERFIL AUMENTADOS */
+.avatar-frame {
+  width: 155px;
+  height: 155px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-color);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 10%;
+  transform: scale(1);
+  border-radius: 50%;
+}
+
+.avatar-icon { font-size: 35px; color: var(--primary-color); }
+.profile-title h2 { font-size: 1.2rem; color: #fff; }
+.highlight { color: var(--primary-color); font-size: 0.85rem; }
+.divider { border: none; height: 1px; background: var(--primary-color); margin: 20px 0; }
+.about-me h3 { font-size: 0.95rem; color: var(--primary-color); margin-bottom: 8px; }
+.about-me p { font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; }
+
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
+.skill-card { border: 1px solid var(--primary-color); padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.5); }
+.skill-icon { font-size: 20px; color: var(--primary-color); }
+.skill-card h4 { font-size: 0.85rem; color: var(--primary-color); }
+.skill-card p { font-size: 0.75rem; color: #94a3b8; }
+
+/* ==========================================
+   UNIDADES DE APRENDIZAJE: PANELES 3D PERSPECTIVA
+========================================== */
+.units-section {
+  max-width: 950px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  text-align: center;
+  color: var(--primary-color);
+  text-shadow: 0 0 12px var(--primary-color);
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 35px;
+  letter-spacing: 2px;
+}
+
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 30px;
+  perspective: 1200px;
+}
+
+.unit-cube-3d {
+  width: 100%;
+  height: 250px;
+  perspective: 1000px;
+}
+
+.cube-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform: rotateX(6deg) rotateY(-4deg);
+}
+
+.unit-cube-3d:hover .cube-inner {
+  transform: rotateX(0deg) rotateY(0deg) translateZ(10px);
+}
+
+.unit-cube-3d.flipped .cube-inner {
+  transform: rotateY(180deg);
+}
+
+.cube-front, .cube-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  border: 2px solid var(--primary-color);
+  background: rgba(2, 8, 20, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 18px var(--glow-shadow), inset 0 0 15px var(--glow-inset);
+  backface-visibility: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* CARA FRONTAL */
+.cube-front {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.unit-info {
+  text-align: left;
+  max-width: 80%;
+}
+
+.unit-info h3 {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px var(--primary-color);
+}
+
+.unit-info p {
+  color: #d0e8ff;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* BOTÓN CIRCULAR CON FLECHA (FLIP BTN) */
+.flip-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px var(--primary-color), inset 0 0 5px var(--glow-inset);
+  transition: all 0.3s ease;
+}
+
+.flip-btn:hover {
+  background: var(--primary-color);
+  color: #020814;
+  transform: scale(1.1);
+  box-shadow: 0 0 18px var(--primary-color);
+}
+
+/* CARA TRASERA - CUADRÍCULA 2x2 */
+.cube-back {
+  transform: rotateY(180deg);
+  background: rgba(0, 10, 25, 0.92);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 20px;
+}
+
+.back-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--primary-color);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--glow-inset);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.flip-btn-back {
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  transition: transform 0.3s;
+}
+
+.flip-btn-back:hover {
+  transform: rotate(-180deg);
+}
+
+/* CONTENEDOR GRID 2x2 */
+.week-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+/* TARJETAS DE SEMANA */
+.week-card {
+  background: var(--glow-inset);
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 8px var(--glow-inset);
+}
+
+.week-card:hover {
+  background: var(--glow-shadow);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 12px var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.week-badge {
+  background: var(--primary-color);
+  color: #020814;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+  letter-spacing: 0.5px;
+}
+
+.week-arrow {
+  align-self: flex-end;
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  opacity: 0.8;
+  transition: transform 0.2s ease;
+}
+
+.week-card:hover .week-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* BOTÓN DE FLECHA CIRCULAR INTERNO */
+.week-arrow-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-size: 0.75rem;
+  box-shadow: 0 0 8px var(--primary-color), inset 0 0 4px var(--primary-color);
+  transition: all 0.25s ease;
+}
+
+.week-card:hover .week-arrow-btn {
+  background-color: var(--primary-color);
+  color: #050b14;
+  box-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* ==========================================
+   MODAL DETALLE DE SEMANA
+========================================== */
+.week-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(2, 6, 18, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.week-modal-overlay.active {
+  display: flex !important;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.week-modal-card {
+  background-color: #050b14;
+  border: 2px solid var(--primary-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 650px;
+  min-height: 320px;
+  padding: 24px 30px;
+  box-shadow: 0 0 25px var(--glow-shadow), inset 0 0 15px var(--glow-inset);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.85);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.week-modal-overlay.active .week-modal-card {
+  transform: scale(1);
+}
+
+.week-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--glow-inset);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.week-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.calendar-icon {
+  font-size: 1.5rem;
+}
+
+.week-modal-title h3 {
+  color: var(--primary-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 0 10px var(--primary-color);
+}
+
+.week-modal-close {
+  background: transparent;
+  border: 1.5px solid var(--primary-color);
+  color: var(--primary-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px var(--primary-color);
+}
+
+.week-modal-close:hover {
+  background-color: var(--primary-color);
+  color: #050b14;
+  box-shadow: 0 0 15px var(--primary-color);
+  transform: scale(1.05);
+}
+
+.week-modal-body {
+  color: #e0f7fc;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* EFECTO HYPERSPACE EN BLANCO */
+.hyperspace-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.hyperspace-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.star-warp-white {
+  position: absolute;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle, transparent 20%, #000 90%),
+              repeating-conic-gradient(from 0deg, #ffffff 0deg 2deg, transparent 2deg 10deg);
+  transform: scale(0.1);
+  border-radius: 50%;
+}
+
+.hyperspace-overlay.active .star-warp-white {
+  animation: warpSpeedWhite 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+.hyperspace-overlay .flash {
+  position: absolute;
+  width: 100%; height: 100%;
+  background: #ffffff;
+  opacity: 0;
+}
+
+.hyperspace-overlay.active .flash {
+  animation: flashWhite 1.2s ease forwards;
+}
+
+@keyframes warpSpeedWhite {
+  0% { transform: scale(0.1) rotate(0deg); opacity: 0; }
+  50% { transform: scale(3) rotate(45deg); opacity: 1; }
+  90% { transform: scale(25) rotate(90deg); opacity: 1; }
+  100% { transform: scale(30) rotate(100deg); opacity: 0; }
+}
+
+@keyframes flashWhite {
+  0%, 70% { opacity: 0; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* MODAL LOGIN CENTRADO */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 8000;
+}
+
+.login-card-centered {
+  background: rgba(5, 15, 35, 0.95);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color);
+  border-radius: 12px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.pixel-input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background: #000;
+  border: 1px solid var(--primary-color);
+  color: #fff;
+  border-radius: 6px;
+}
+
+.btn-submit {
+  width: 100%;
+  margin-top: 15px;
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 10px;
+  font-weight: bold;
+}
+
+.btn-back {
+  width: 100%;
+  margin-top: 10px;
+  background: var(--primary-color);
+  color: #000;
+  border: none;
+  padding: 8px;
+  font-weight: bold;
+}
+
+/* ==========================================
+   FOOTER PIE DE PÁGINA
+========================================== */
+.footer-bar {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: rgba(2, 8, 20, 0.95);
+  border-top: 2px solid var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-color);
+  color: #ffffff;
+  padding: 16px 0;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.footer-icon {
+  font-size: 1.1rem;
+}
+/* ESTILO PARA ENLACE/BOTÓN GENIALLY EN EL MODAL */
+.btn-genially {
+  display: inline-block;
+  padding: 10px 18px;
+  background: rgba(0, 243, 255, 0.1);
+  color: var(--primary-color);
+  border: 1.5px solid var(--primary-color);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px var(--glow-inset);
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.btn-genially:hover {
+  background: var(--primary-color);
+  color: #020814;
+  box-shadow: 0 0 18px var(--primary-color);
+  transform: translateY(-2px);
+}
+/* Estilo base neón (Sith / Cian) */
+.modal-card-box {
+  border: 1.5px solid #00f2fe;
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(0, 242, 254, 0.03);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.btn-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(0, 242, 254, 0.15);
+  border: 1px solid #00f2fe;
+  color: #00f2fe;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Modo Rojo (Sith / Red Glow) */
+body.glow-red .modal-card-box {
+  border-color: #ff0055;
+  background: rgba(255, 0, 85, 0.03);
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
+}
+
+body.glow-red .btn-card-action {
+  border-color: #ff0055;
+  background: rgba(255, 0, 85, 0.15);
+  color: #ff0055;
+}
