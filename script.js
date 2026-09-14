@@ -67,11 +67,18 @@ function toggleWeeks(element) {
 
 const semanasInfo = {
   'Semana 1': {
-    actividad: 'ACTIVIDAD 01',
-    pdfTitulo: 'Infografía Arquitectura de Base de Datos',
-    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato.pdf',
-    pdfTitulo: 'Infografía Base de Datos SEM 1',
-    pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing',
+    actividades: [
+      {
+        actividad: 'ACTIVIDAD 01',
+        pdfTitulo: 'Infografía Arquitectura de Base de Datos',
+        pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing'
+      },
+      {
+        actividad: 'ACTIVIDAD 02',
+        pdfTitulo: 'Infografías Base de Datos SEM 1',
+        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing'
+      }
+    ],
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
     geniallyLink: 'https://view.genially.com/6aa1b61aac454a031b87e6de'
   },
