@@ -96,27 +96,29 @@ function openWeekModal(weekName) {
 
     if (semanasInfo[weekName]) {
       const info = semanasInfo[weekName];
-      let contenidoHTML = `<div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">`;
 
-      if (info.actividades && info.actividades.length > 0) {
-        info.actividades.forEach(act => {
-          contenidoHTML += `
-            <div class="modal-card-box">
-              <span class="activity-badge">${act.actividad || 'ACTIVIDAD'}</span>
-              <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
-                ${act.pdfTitulo}
-              </p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="${act.pdfRuta}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
-                  <i class="fa-solid fa-eye"></i> Ver PDF
-                </a>
-              </div>
+      let contenidoHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+          
+          <!-- TARJETA 1: INFOGRAFÍA / DOCUMENTO PDF -->
+          <div class="modal-card-box">
+            <span class="activity-badge">${info.actividad || 'ACTIVIDAD'}</span>
+            <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
+              ${info.pdfTitulo}
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="${info.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
+                <i class="fa-solid fa-eye"></i> Ver PDF
+              </a>
+              <a href="${info.pdfRuta}" download="${info.pdfTitulo}.pdf" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
+                <i class="fa-solid fa-download"></i> Descargar PDF
+              </a>
             </div>
-          `;
-        });
-      }
+          </div>
+      `;
 
+      // TARJETA 2: GENIALLY (Solo se agrega si existe en la semana)
       if (info.geniallyLink) {
         contenidoHTML += `
           <div class="modal-card-box">
@@ -144,6 +146,14 @@ function openWeekModal(weekName) {
 
     modal.classList.add('active');
     modal.style.display = 'flex';
+  }
+}
+
+function closeWeekModal() {
+  const modal = document.getElementById('weekModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
   }
 }
 
