@@ -76,7 +76,7 @@ const semanasInfo = {
       {
         actividad: 'ACTIVIDAD 02',
         pdfTitulo: 'Infografías Base de Datos SEM 1',
-        pdfRuta: 'URL_DE_TU_SEGUNDO_PDF_EN_DRIVE' // Reemplaza esto con tu enlace de Google Drive
+        pdfRuta: 'URL_DE_TU_SEGUNDO_PDF_EN_DRIVE'
       }
     ],
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
@@ -108,7 +108,6 @@ function openWeekModal(weekName) {
       const info = semanasInfo[weekName];
       let contenidoHTML = `<div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">`;
 
-      // RECORRE Y CREA TODAS LAS ACTIVIDADES/PDFs DE LA SEMANA
       if (info.actividades && info.actividades.length > 0) {
         info.actividades.forEach(act => {
           contenidoHTML += `
@@ -131,7 +130,6 @@ function openWeekModal(weekName) {
         });
       }
 
-      // TARJETA DE GENIALLY (Si existe)
       if (info.geniallyLink) {
         contenidoHTML += `
           <div class="modal-card-box">
@@ -159,6 +157,15 @@ function openWeekModal(weekName) {
 
     modal.classList.add('active');
     modal.style.display = 'flex';
+  }
+}
+
+// FUNCIÓN DE CIERRE (AQUÍ ESTÁ LA SOLUCIÓN)
+function closeWeekModal() {
+  const modal = document.getElementById('weekModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
   }
 }
 
