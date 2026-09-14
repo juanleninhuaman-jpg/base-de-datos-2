@@ -160,7 +160,6 @@ function openWeekModal(weekName) {
   }
 }
 
-// FUNCIÓN DE CIERRE (AQUÍ ESTÁ LA SOLUCIÓN)
 function closeWeekModal() {
   const modal = document.getElementById('weekModal');
   if (modal) {
@@ -170,16 +169,22 @@ function closeWeekModal() {
 }
 
 // ==========================================
-// 5. CERRAR MODALES AL HACER CLIC FUERA
+// 5. EVENTOS DE CIERRE GLOBAL (FORZADO PARA BOTÓN "X" Y CLIC FUERA)
 // ==========================================
-window.addEventListener('click', (event) => {
+document.addEventListener('click', (event) => {
   const weekModal = document.getElementById('weekModal');
   const loginModal = document.getElementById('loginModal');
 
+  // Cierra si hace clic en el botón X de la semana
+  if (event.target.classList.contains('week-modal-close') || event.target.closest('.week-modal-close')) {
+    closeWeekModal();
+  }
+
+  // Cierra si hace clic fuera del modal
   if (event.target === weekModal) {
     closeWeekModal();
   }
-  
+
   if (event.target === loginModal) {
     closeLoginModal();
   }
