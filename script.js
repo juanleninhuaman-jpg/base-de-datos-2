@@ -70,7 +70,7 @@ const semanasInfo = {
     actividad: 'ACTIVIDAD 01',
     pdfTitulo: 'Infografía Arquitectura de Base de Datos',
     pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato.pdf',
-    actividad: 'ACTIVIDAD 02',
+    actividad: 'ACTIVIDAD 0',
     pdfTitulo: 'Infografía Base de Datos',
     pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing',
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
