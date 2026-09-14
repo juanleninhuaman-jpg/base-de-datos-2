@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio - Base de Datos II</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="space-background"></div>
+
+  <div id="hyperspaceOverlay" class="hyperspace-overlay">
+    <div class="star-warp-white"></div>
+    <div class="flash"></div>
+  </div>
+
+  <header class="header">
+    <div class="logo">PORTAFOLIO ESTUDIANTIL</div>
+    
+    <div class="header-controls">
+      <button class="btn" onclick="triggerHyperspaceLogin()">
+        🔑 INICIAR SESIÓN
+      </button>
+
+      <div id="glow-toggle" class="lightsaber-vertical" title="Haz clic para cambiar de lado de la Fuerza">
+        <div class="saber-blade-v"></div>
+        <div class="saber-hilt-v">
+          <div class="hilt-guard"></div>
+          <div class="hilt-grip"></div>
+          <div class="hilt-pommel"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="cube-container">
+    <div class="cube" id="main3DCube">
+      <div class="cube-face face-front">
+        <h1 class="title">BIENVENIDO AL PORTAFOLIO</h1>
+        <p class="subtitle">Base de Datos II - Universidad Peruana Los Andes</p>
+      </div>
+
+      <div class="cube-face face-back">
+        <div class="upla-content">
+          <p class="upla-header">UNIVERSIDAD PERUANA LOS ANDES</p>
+          <div class="upla-logo-box">
+            <img src="imagen/logo-upla.jpg" alt="Escudo UPLA" class="upla-img-logo">
+            <p class="upla-footer">UPLA - 2026</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cube-face face-right">
+        <p class="side-text">
+          FACULTAD DE<br>INGENIERÍA
+        </p>
+      </div>
+
+      <div class="cube-face face-left">
+        <p class="side-text">
+          ESCUELA PROFESIONAL<br>
+          DE INGENIERÍA DE<br>
+          SISTEMAS Y COMPUTACIÓN
+        </p>
+      </div>
+
+      <div class="cube-face face-bottom"></div>
+
+      <div class="base-platform"></div>
+    </div>
+  </section>
+
+  <section class="profile-container">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="avatar-frame">
+          <img src="imagen/mi foto.jpeg" alt="Juan Lenin Huaman Quispe" class="profile-photo">
+        </div>
+        <div class="profile-title">
+          <h2><i class="fa-solid fa-graduation-cap"></i> Juan Lenin Huaman Quispe</h2>
+          <p class="highlight"><i class="fa-solid fa-building-columns"></i> V Ciclo - Ingeniería de Sistemas y Computación</p>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="about-me">
+        <h3><i class="fa-solid fa-user-graduate"></i> SOBRE MÍ</h3>
+        <p>¡Hola! Soy estudiante de <strong>Ingeniería de Sistemas y Computación</strong>. interesado en el desarrollo de soluciones tecnológicas y en el aprendizaje de nuevas herramientas informáticas. Me gusta trabajar en proyectos relacionados con el desarrollo de software, diseño de interfaces y gestión de bases de datos.</p>
+        <p>Durante mi formación universitaria he adquirido conocimientos en <strong>programación, bases de datos, desarrollo web y diseño web,</strong> aplicándolos en diferentes proyectos académicos. Me considero una persona responsable, creativa y con disposición para aprender y mejorar constantemente.</p>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <i class="fa-solid fa-code skill-icon"></i>
+          <div>
+            <h4>Programación</h4>
+            <p>Java / C# Básico-Intermedio</p>
+          </div>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-users skill-icon"></i>
+          <div>
+            <h4>Liderazgo</h4>
+            <p>Trabajo en equipo y organización</p>
+          </div>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-bullseye skill-icon"></i>
+          <div>
+            <h4>Objetivo</h4>
+            <p>Desarrollo de Software y diseñador de pagina web</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN DE UNIDADES DE APRENDIZAJE -->
+<section class="units-section">
+  <h2 class="section-title">UNIDADES DE APRENDIZAJE</h2>
+  <div class="units-grid">
+
+    <!-- UNIDAD 1 -->
+    <div class="unit-cube-3d" id="unit1">
+      <div class="cube-inner">
+        <!-- Cara Frontal -->
+        <div class="cube-front">
+          <div class="unit-info">
+            <h3>UNIDAD 1</h3>
+            <p>Introducción a los Sistemas Informáticos</p>
+          </div>
+          <button class="flip-btn" onclick="toggleFlip('unit1')">&#10095;</button>
+        </div>
+        <!-- Cara Trasera (Cuadrícula 2x2) -->
+        <div class="cube-back">
+          <div class="back-header">
+            <span>SEMANAS 1 - 4</span>
+            <button class="flip-btn-back" onclick="toggleFlip('unit1')">✕</button>
+          </div>
+          <div class="week-grid-2x2">
+            <!-- Ejemplo en una tarjeta de semana -->
+          <div class="week-card" onclick="openWeekModal('Semana 1')">
+            <span class="week-badge">Semana 1</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 2')">
+            <span class="week-badge">Semana 2</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 3')">
+            <span class="week-badge">Semana 3</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 4')">
+            <span class="week-badge">Semana 4</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIDAD 2 -->
+    <div class="unit-cube-3d" id="unit2">
+      <div class="cube-inner">
+        <div class="cube-front">
+          <div class="unit-info">
+            <h3>UNIDAD 2</h3>
+            <p>....</p>
+          </div>
+          <button class="flip-btn" onclick="toggleFlip('unit2')">&#10095;</button>
+        </div>
+        <div class="cube-back">
+          <div class="back-header">
+            <span>SEMANAS 5 - 8</span>
+            <button class="flip-btn-back" onclick="toggleFlip('unit2')">✕</button>
+          </div>
+          <div class="week-grid-2x2">
+                      <div class="week-card" onclick="openWeekModal('Semana 5')">
+            <span class="week-badge">Semana 5</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 6')">
+            <span class="week-badge">Semana 6</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 7')">
+            <span class="week-badge">Semana 7</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 8')">
+            <span class="week-badge">Semana 8</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIDAD 3 -->
+    <div class="unit-cube-3d" id="unit3">
+      <div class="cube-inner">
+        <div class="cube-front">
+          <div class="unit-info">
+            <h3>UNIDAD 3</h3>
+            <p>....</p>
+          </div>
+          <button class="flip-btn" onclick="toggleFlip('unit3')">&#10095;</button>
+        </div>
+        <div class="cube-back">
+          <div class="back-header">
+            <span>SEMANAS 9 - 12</span>
+            <button class="flip-btn-back" onclick="toggleFlip('unit3')">✕</button>
+          </div>
+          <div class="week-grid-2x2">
+                      <div class="week-card" onclick="openWeekModal('Semana 9')">
+            <span class="week-badge">Semana 9</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 10')">
+            <span class="week-badge">Semana 10</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 11')">
+            <span class="week-badge">Semana 11</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 12')">
+            <span class="week-badge">Semana 12</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIDAD 4 -->
+    <div class="unit-cube-3d" id="unit4">
+      <div class="cube-inner">
+        <div class="cube-front">
+          <div class="unit-info">
+            <h3>UNIDAD 4</h3>
+            <p>....</p>
+          </div>
+          <button class="flip-btn" onclick="toggleFlip('unit4')">&#10095;</button>
+        </div>
+        <div class="cube-back">
+          <div class="back-header">
+            <span>SEMANAS 13 - 16</span>
+            <button class="flip-btn-back" onclick="toggleFlip('unit4')">✕</button>
+          </div>
+          <div class="week-grid-2x2">
+                      <div class="week-card" onclick="openWeekModal('Semana 13')">
+            <span class="week-badge">Semana 13</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 14')">
+            <span class="week-badge">Semana 14</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 15')">
+            <span class="week-badge">Semana 15</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+                      <div class="week-card" onclick="openWeekModal('Semana 16')">
+            <span class="week-badge">Semana 16</span>
+            <div class="week-arrow-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ESTRUCTURA DEL MODAL POP-UP ESTILO NEÓN -->
+<div id="weekModal" class="week-modal-overlay">
+  <div class="week-modal-card">
+    <div class="week-modal-header">
+      <div class="week-modal-title">
+        <span class="calendar-icon">📅</span>
+        <h3 id="modalWeekTitle">Semana 1</h3>
+      </div>
+      <button class="week-modal-close" onclick="closeWeekModal()" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="week-modal-body" id="modalWeekBody">
+      <div id="modalGeniallyDesc" class="modal-desc"></div>
+      <a id="modalGeniallyLink" class="modal-link" href="#" target="_blank"></a>
+    </div>
+  </div>
+</div>
+
+  <div id="loginModal" class="modal-overlay">
+    <div class="login-card-centered">
+      <div class="modal-header">
+        <h3>ACCESO ESTUDIANTIL</h3>
+        <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" placeholder="Código de Estudiante" class="pixel-input">
+        <input type="password" placeholder="Contraseña" class="pixel-input">
+        <button class="btn btn-submit">INGRESAR</button>
+        <button class="btn btn-back" onclick="closeLoginModal()">Volver al Frente ↺</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <!-- FOOTER PIE DE PÁGINA -->
+<footer class="footer-bar">
+  <div class="footer-content">
+    <i class="fa-solid fa-graduation-cap footer-icon"></i>
+    <span>Universidad Peruana Los Andes - Base de Datos II</span>
+  </div>
+</footer>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
