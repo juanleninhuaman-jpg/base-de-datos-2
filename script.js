@@ -69,14 +69,14 @@ const semanasInfo = {
   'Semana 1': {
     actividad: 'ACTIVIDAD 01',
     pdfTitulo: 'Infografía Arquitectura de Base de Datos',
-    pdfRuta: 'documentos/Infografia_Arquitecturas_BD.pdf',
+    pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing',
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
     geniallyLink: 'https://view.genially.com/6aa1b61aac454a031b87e6de'
   },
   'Semana 2': {
     actividad: 'ACTIVIDAD 01',
     pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
-    pdfRuta: 'documentos/Infografia_Arquitecturas_BD_SEM_2.pdf'
+    pdfRuta: 'https://drive.google.com/file/d/13LwHMIb-DwGgyZL0KIX7OaQQSMFJDa24/view?usp=sharing'
   }
 };
 
