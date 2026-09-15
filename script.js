@@ -76,7 +76,7 @@ const semanasInfo = {
       {
         actividad: 'ACTIVIDAD 02',
         pdfTitulo: 'Infografías Base de Datos SEM 1',
-        pdfRuta: 'URL_DE_TU_SEGUNDO_PDF_EN_DRIVE' // Reemplaza esto con tu enlace de Google Drive
+        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing' // Reemplaza esto con tu enlace de Google Drive
       }
     ],
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
