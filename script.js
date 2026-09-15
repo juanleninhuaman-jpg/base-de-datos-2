@@ -88,6 +88,16 @@ const semanasInfo = {
         actividad: 'ACTIVIDAD 01',
         pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
         pdfRuta: 'https://drive.google.com/file/d/13LwHMIb-DwGgyZL0KIX7OaQQSMFJDa24/view?usp=sharing'
+      },
+      {
+        actividad: 'ACTIVIDAD 02',
+        pdfTitulo: 'Próximamente...',
+        pdfRuta: '#'
+      },
+      {
+        actividad: 'ACTIVIDAD 03',
+        pdfTitulo: 'Manual de instalaciones de MS - SQL Server',
+        pdfRuta: '#'
       }
     ]
   }
