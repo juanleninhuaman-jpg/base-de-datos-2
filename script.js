@@ -76,7 +76,7 @@ const semanasInfo = {
   'Semana 2': {
     actividad: 'ACTIVIDAD 01',
     pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
-    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato_SEM_2.pdf'
+    pdfRuta: 'https://drive.google.com/file/d/13LwHMIb-DwGgyZL0KIX7OaQQSMFJDa24/view?usp=sharing'
   }
 };
 
