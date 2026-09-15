@@ -67,29 +67,16 @@ function toggleWeeks(element) {
 
 const semanasInfo = {
   'Semana 1': {
-    actividades: [
-      {
-        actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Infografía Arquitectura de Base de Datos',
-        pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing'
-      },
-      {
-        actividad: 'ACTIVIDAD 02',
-        pdfTitulo: 'Infografías Base de Datos SEM 1',
-        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing'
-      }
-    ],
+    actividad: 'ACTIVIDAD 01',
+    pdfTitulo: 'Infografía Arquitectura de Base de Datos',
+    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato.pdf',
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
     geniallyLink: 'https://view.genially.com/6aa1b61aac454a031b87e6de'
   },
   'Semana 2': {
-    actividades: [
-      {
-        actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
-        pdfRuta: 'https://drive.google.com/file/d/13LwHMIb-DwGgyZL0KIX7OaQQSMFJDa24/view?usp=sharing'
-      }
-    ]
+    actividad: 'ACTIVIDAD 01',
+    pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
+    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato_SEM_2.pdf'
   }
 };
 
@@ -104,57 +91,49 @@ function openWeekModal(weekName) {
 
     if (modalLink) modalLink.style.display = 'none';
 
-    // Inyección forzada directamente para Semana 1
-    if (weekName.includes('1')) {
-      if (modalDesc) {
-        modalDesc.innerHTML = `
-          <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
-            <!-- ACTIVIDAD 01 -->
-            <div class="modal-card-box">
-              <span class="activity-badge" style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.85rem; color: #ffffff;">ACTIVIDAD 01</span>
-              <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
-                Infografía Arquitectura de Base de Datos
-              </p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-card-action">
-                  <i class="fa-solid fa-eye"></i> Ver PDF
-                </a>
-                <a href="https://drive.google.com/uc?export=download&id=1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
-                  <i class="fa-solid fa-download"></i> Descargar PDF
-                </a>
-              </div>
-            </div>
+    if (semanasInfo[weekName]) {
+      const info = semanasInfo[weekName];
 
-            <!-- ACTIVIDAD 02 -->
-            <div class="modal-card-box">
-              <span class="activity-badge" style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.85rem; color: #ffffff;">ACTIVIDAD 02</span>
-              <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
-                Infografías Base de Datos SEM 1
-              </p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-card-action">
-                  <i class="fa-solid fa-eye"></i> Ver PDF
-                </a>
-                <a href="https://drive.google.com/uc?export=download&id=1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
-                  <i class="fa-solid fa-download"></i> Descargar PDF
-                </a>
-              </div>
-            </div>
-
-            <!-- GENIALLY -->
-            <div class="modal-card-box">
-              <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-laptop-code" style="font-size: 1.2rem;"></i>
-                Resumen de Arquitectura de Base de Datos
-              </p>
-              <a href="https://view.genially.com/6aa1b61aac454a031b87e6de" target="_blank" rel="noopener noreferrer" class="btn-card-action">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir en Genially
+      let contenidoHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+          
+          <!-- TARJETA 1: INFOGRAFÍA / DOCUMENTO PDF -->
+          <div class="modal-card-box">
+            <span class="activity-badge">${info.actividad || 'ACTIVIDAD'}</span>
+            <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
+              ${info.pdfTitulo}
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="${info.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
+                <i class="fa-solid fa-eye"></i> Ver PDF
+              </a>
+              <a href="${info.pdfRuta}" download="${info.pdfTitulo}.pdf" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
+                <i class="fa-solid fa-download"></i> Descargar PDF
               </a>
             </div>
           </div>
+      `;
+
+      // TARJETA 2: GENIALLY (Solo se agrega si existe en la semana)
+      if (info.geniallyLink) {
+        contenidoHTML += `
+          <div class="modal-card-box">
+            <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-laptop-code" style="font-size: 1.2rem;"></i>
+              ${info.geniallyTitulo}
+            </p>
+            <a href="${info.geniallyLink}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir en Genially
+            </a>
+          </div>
         `;
+      }
+
+      contenidoHTML += `</div>`;
+
+      if (modalDesc) {
+        modalDesc.innerHTML = contenidoHTML;
       }
     } else {
       if (modalDesc) {
@@ -166,21 +145,26 @@ function openWeekModal(weekName) {
     modal.style.display = 'flex';
   }
 }
+
+function closeWeekModal() {
+  const modal = document.getElementById('weekModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+
 // ==========================================
-// 5. EVENTOS DE CIERRE GLOBAL
+// 5. CERRAR MODALES AL HACER CLIC FUERA
 // ==========================================
-document.addEventListener('click', (event) => {
+window.addEventListener('click', (event) => {
   const weekModal = document.getElementById('weekModal');
   const loginModal = document.getElementById('loginModal');
-
-  if (event.target.classList.contains('week-modal-close') || event.target.closest('.week-modal-close')) {
-    closeWeekModal();
-  }
 
   if (event.target === weekModal) {
     closeWeekModal();
   }
-
+  
   if (event.target === loginModal) {
     closeLoginModal();
   }
