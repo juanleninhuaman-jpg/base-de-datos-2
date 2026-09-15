@@ -65,10 +65,6 @@ function toggleWeeks(element) {
 // 4. CONFIGURACIÓN Y VENTANA EMERGENTE (MODAL) DEL PDF Y GENIALLY
 // ==========================================
 
-// ==========================================
-// 4. CONFIGURACIÓN Y VENTANA EMERGENTE (MODAL) DEL PDF Y GENIALLY
-// ==========================================
-
 const semanasInfo = {
   'Semana 1': {
     actividades: [
