@@ -76,7 +76,8 @@ const semanasInfo = {
       {
         actividad: 'ACTIVIDAD 02',
         pdfTitulo: 'Infografías Base de Datos SEM 1',
-        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing' // Reemplaza esto con tu enlace de Google Drive
+        // REEMPLAZA esta URL con tu enlace real de Google Drive:
+        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing'
       }
     ],
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
@@ -111,8 +112,15 @@ function openWeekModal(weekName) {
       // RECORRE Y CREA TODAS LAS ACTIVIDADES/PDFs DE LA SEMANA
       if (info.actividades && info.actividades.length > 0) {
         info.actividades.forEach(act => {
-          // Genera el enlace de descarga directa de Google Drive
-          const downloadUrl = act.pdfRuta.replace('/view?usp=sharing', '&export=download');
+          let downloadUrl = act.pdfRuta;
+
+          // Transforma la URL solo si es una URL válida de Google Drive
+          if (act.pdfRuta && act.pdfRuta.includes('drive.google.com')) {
+            downloadUrl = act.pdfRuta
+              .replace('/view?usp=sharing', '&export=download')
+              .replace('/view', '&export=download')
+              .replace('?usp=sharing', '&export=download');
+          }
 
           contenidoHTML += `
             <div class="modal-card-box">
