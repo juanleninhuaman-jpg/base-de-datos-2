@@ -67,29 +67,16 @@ function toggleWeeks(element) {
 
 const semanasInfo = {
   'Semana 1': {
-    actividades: [
-      {
-        actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Infografía Arquitectura de Base de Datos',
-        pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing'
-      },
-      {
-        actividad: 'ACTIVIDAD 02',
-        pdfTitulo: 'Infografías Base de Datos SEM 1',
-        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing' // Reemplaza esto con tu enlace de Google Drive
-      }
-    ],
+    actividad: 'ACTIVIDAD 01',
+    pdfTitulo: 'Infografía Arquitectura de Base de Datos',
+    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato.pdf',
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
     geniallyLink: 'https://view.genially.com/6aa1b61aac454a031b87e6de'
   },
   'Semana 2': {
-    actividades: [
-      {
-        actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
-        pdfRuta: 'https://drive.google.com/file/d/13LwHMIb-DwGgyZL0KIX7OaQQSMFJDa24/view?usp=sharing'
-      }
-    ]
+    actividad: 'ACTIVIDAD 01',
+    pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
+    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato_SEM_2.pdf'
   }
 };
 
@@ -106,32 +93,29 @@ function openWeekModal(weekName) {
 
     if (semanasInfo[weekName]) {
       const info = semanasInfo[weekName];
-      let contenidoHTML = `<div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">`;
 
-      // RECORRE Y CREA TODAS LAS ACTIVIDADES/PDFs DE LA SEMANA
-      if (info.actividades && info.actividades.length > 0) {
-        info.actividades.forEach(act => {
-          contenidoHTML += `
-            <div class="modal-card-box">
-              <span class="activity-badge">${act.actividad || 'ACTIVIDAD'}</span>
-              <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
-                ${act.pdfTitulo}
-              </p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="${act.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
-                  <i class="fa-solid fa-eye"></i> Ver PDF
-                </a>
-                <a href="${act.pdfRuta}" download="${act.pdfTitulo}.pdf" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
-                  <i class="fa-solid fa-download"></i> Descargar PDF
-                </a>
-              </div>
+      let contenidoHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+          
+          <!-- TARJETA 1: INFOGRAFÍA / DOCUMENTO PDF -->
+          <div class="modal-card-box">
+            <span class="activity-badge">${info.actividad || 'ACTIVIDAD'}</span>
+            <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
+              ${info.pdfTitulo}
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="${info.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
+                <i class="fa-solid fa-eye"></i> Ver PDF
+              </a>
+              <a href="${info.pdfRuta}" download="${info.pdfTitulo}.pdf" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
+                <i class="fa-solid fa-download"></i> Descargar PDF
+              </a>
             </div>
-          `;
-        });
-      }
+          </div>
+      `;
 
-      // TARJETA DE GENIALLY (Si existe)
+      // TARJETA 2: GENIALLY (Solo se agrega si existe en la semana)
       if (info.geniallyLink) {
         contenidoHTML += `
           <div class="modal-card-box">
@@ -161,14 +145,23 @@ function openWeekModal(weekName) {
     modal.style.display = 'flex';
   }
 }
+
+function closeWeekModal() {
+  const modal = document.getElementById('weekModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+
 // ==========================================
-// 5. CERRAR MODALES (AL HACER CLIC EN LA X O FUERA)
+// 5. CERRAR MODALES AL HACER CLIC EN LA X O FUERA
 // ==========================================
-document.addEventListener('click', (event) => {
+window.addEventListener('click', (event) => {
   const weekModal = document.getElementById('weekModal');
   const loginModal = document.getElementById('loginModal');
 
-  // Detectar clic en el botón de cerrar (X) o cualquier elemento interno del botón
+  // Si hace clic en la X del modal o elementos dentro de ella
   if (
     event.target.classList.contains('week-modal-close') ||
     event.target.closest('.week-modal-close') ||
@@ -179,7 +172,7 @@ document.addEventListener('click', (event) => {
     closeLoginModal();
   }
 
-  // Detectar clic fuera del modal (en el fondo oscuro)
+  // Si hace clic fuera de la caja modal (en el fondo oscuro)
   if (event.target === weekModal) {
     closeWeekModal();
   }
