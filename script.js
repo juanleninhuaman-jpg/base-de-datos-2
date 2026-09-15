@@ -69,7 +69,7 @@ const semanasInfo = {
   'Semana 1': {
     actividad: 'ACTIVIDAD 01',
     pdfTitulo: 'Infografía Arquitectura de Base de Datos',
-    pdfRuta: 'documentos/Infografia_Arquitecturas_Base de Dato.pdf',
+    pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing',
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
     geniallyLink: 'https://view.genially.com/6aa1b61aac454a031b87e6de'
   },
@@ -155,28 +155,16 @@ function closeWeekModal() {
 }
 
 // ==========================================
-// 5. CERRAR MODALES AL HACER CLIC EN LA X O FUERA
+// 5. CERRAR MODALES AL HACER CLIC FUERA
 // ==========================================
 window.addEventListener('click', (event) => {
   const weekModal = document.getElementById('weekModal');
   const loginModal = document.getElementById('loginModal');
 
-  // Si hace clic en la X del modal o elementos dentro de ella
-  if (
-    event.target.classList.contains('week-modal-close') ||
-    event.target.closest('.week-modal-close') ||
-    event.target.classList.contains('close-btn') ||
-    event.target.closest('.close-btn')
-  ) {
-    closeWeekModal();
-    closeLoginModal();
-  }
-
-  // Si hace clic fuera de la caja modal (en el fondo oscuro)
   if (event.target === weekModal) {
     closeWeekModal();
   }
-
+  
   if (event.target === loginModal) {
     closeLoginModal();
   }
