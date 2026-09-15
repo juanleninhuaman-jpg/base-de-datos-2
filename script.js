@@ -111,6 +111,9 @@ function openWeekModal(weekName) {
       // RECORRE Y CREA TODAS LAS ACTIVIDADES/PDFs DE LA SEMANA
       if (info.actividades && info.actividades.length > 0) {
         info.actividades.forEach(act => {
+          // Genera el enlace de descarga directa de Google Drive
+          const downloadUrl = act.pdfRuta.replace('/view?usp=sharing', '&export=download');
+
           contenidoHTML += `
             <div class="modal-card-box">
               <span class="activity-badge">${act.actividad || 'ACTIVIDAD'}</span>
@@ -122,7 +125,7 @@ function openWeekModal(weekName) {
                 <a href="${act.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
                   <i class="fa-solid fa-eye"></i> Ver PDF
                 </a>
-                <a href="${act.pdfRuta}" download="${act.pdfTitulo}.pdf" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
+                <a href="${downloadUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
                   <i class="fa-solid fa-download"></i> Descargar PDF
                 </a>
               </div>
@@ -159,6 +162,14 @@ function openWeekModal(weekName) {
 
     modal.classList.add('active');
     modal.style.display = 'flex';
+  }
+}
+
+function closeWeekModal() {
+  const modal = document.getElementById('weekModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
   }
 }
 
