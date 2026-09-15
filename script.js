@@ -111,16 +111,6 @@ function openWeekModal(weekName) {
       // RECORRE Y CREA TODAS LAS ACTIVIDADES/PDFs DE LA SEMANA
       if (info.actividades && info.actividades.length > 0) {
         info.actividades.forEach(act => {
-          let downloadUrl = act.pdfRuta;
-
-          // Extraer ID de Google Drive para generar la URL exacta de descarga directa
-          if (act.pdfRuta && act.pdfRuta.includes('drive.google.com')) {
-            const match = act.pdfRuta.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (match && match[1]) {
-              downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
-            }
-          }
-
           contenidoHTML += `
             <div class="modal-card-box">
               <span class="activity-badge">${act.actividad || 'ACTIVIDAD'}</span>
@@ -131,9 +121,6 @@ function openWeekModal(weekName) {
               <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <a href="${act.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
                   <i class="fa-solid fa-eye"></i> Ver PDF
-                </a>
-                <a href="${downloadUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);">
-                  <i class="fa-solid fa-download"></i> Descargar PDF
                 </a>
               </div>
             </div>
