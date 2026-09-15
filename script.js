@@ -104,14 +104,16 @@ function openWeekModal(weekName) {
 
     if (modalLink) modalLink.style.display = 'none';
 
+    // Limpia contenido previo antes de inyectar el nuevo HTML
+    if (modalDesc) modalDesc.innerHTML = '';
+
     if (semanasInfo[weekName]) {
       const info = semanasInfo[weekName];
       let contenidoHTML = `<div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">`;
 
-      // GENERA CADA TARJETA DE ACTIVIDAD
+      // Genera cada tarjeta de actividad
       if (info.actividades && info.actividades.length > 0) {
         info.actividades.forEach(act => {
-          // Obtiene la URL de descarga directa de Google Drive
           const driveIdMatch = act.pdfRuta.match(/\/d\/([^\/]+)/);
           const downloadUrl = driveIdMatch 
             ? `https://drive.google.com/uc?export=download&id=${driveIdMatch[1]}`
@@ -137,7 +139,7 @@ function openWeekModal(weekName) {
         });
       }
 
-      // TARJETA DE GENIALLY
+      // Tarjeta de Genially
       if (info.geniallyLink) {
         contenidoHTML += `
           <div class="modal-card-box">
@@ -167,17 +169,30 @@ function openWeekModal(weekName) {
     modal.style.display = 'flex';
   }
 }
+
+function closeWeekModal() {
+  const modal = document.getElementById('weekModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+
 // ==========================================
-// 5. CERRAR MODALES AL HACER CLIC FUERA
+// 5. EVENTOS DE CIERRE GLOBAL
 // ==========================================
-window.addEventListener('click', (event) => {
+document.addEventListener('click', (event) => {
   const weekModal = document.getElementById('weekModal');
   const loginModal = document.getElementById('loginModal');
+
+  if (event.target.classList.contains('week-modal-close') || event.target.closest('.week-modal-close')) {
+    closeWeekModal();
+  }
 
   if (event.target === weekModal) {
     closeWeekModal();
   }
-  
+
   if (event.target === loginModal) {
     closeLoginModal();
   }
