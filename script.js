@@ -155,16 +155,28 @@ function closeWeekModal() {
 }
 
 // ==========================================
-// 5. CERRAR MODALES AL HACER CLIC FUERA
+// 5. CERRAR MODALES (AL HACER CLIC EN LA X O FUERA)
 // ==========================================
-window.addEventListener('click', (event) => {
+document.addEventListener('click', (event) => {
   const weekModal = document.getElementById('weekModal');
   const loginModal = document.getElementById('loginModal');
 
+  // Detectar clic en el botón de cerrar (X) o cualquier elemento interno del botón
+  if (
+    event.target.classList.contains('week-modal-close') ||
+    event.target.closest('.week-modal-close') ||
+    event.target.classList.contains('close-btn') ||
+    event.target.closest('.close-btn')
+  ) {
+    closeWeekModal();
+    closeLoginModal();
+  }
+
+  // Detectar clic fuera del modal (en el fondo oscuro)
   if (event.target === weekModal) {
     closeWeekModal();
   }
-  
+
   if (event.target === loginModal) {
     closeLoginModal();
   }
