@@ -70,12 +70,12 @@ const semanasInfo = {
     actividades: [
       {
         actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Infografía Arquitectura de Base de Datos',
+        pdfTitulo: 'Arquitectura de Base de Datos',
         pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing'
       },
       {
         actividad: 'ACTIVIDAD 02',
-        pdfTitulo: 'Infografías Base de Datos SEM 1',
+        pdfTitulo: 'Base de Datos',
         pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing'
       }
     ],
@@ -91,13 +91,13 @@ const semanasInfo = {
       },
       {
         actividad: 'ACTIVIDAD 02',
-        pdfTitulo: 'Próximamente...',
-        pdfRuta: '#'
+        pdfTitulo: 'Los Gestores de Base de Datos DBMS',
+        pdfRuta: 'https://drive.google.com/file/d/1n4kpDW22UB9oHBbVRWj7X5Jt1DbJ_NKn/view?usp=sharing'
       },
       {
         actividad: 'ACTIVIDAD 03',
         pdfTitulo: 'Manual de instalaciones de MS - SQL Server',
-        pdfRuta: '#'
+        pdfRuta: 'https://drive.google.com/file/d/1dcmkaa6Ydmz_4oPojTVz6pJtGDUoTw9w/view?usp=sharing'
       }
     ]
   }
