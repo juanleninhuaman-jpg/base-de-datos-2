@@ -76,7 +76,7 @@ const semanasInfo = {
       {
         actividad: 'ACTIVIDAD 02',
         pdfTitulo: 'Base de Datos',
-        pdfRuta: 'https://drive.google.com/file/d/1Y8pC6N4gLl6O6eOuul-4n6MnZxt2ig-Z/view?usp=sharing'
+        pdfRuta: 'https://drive.google.com/file/d/1eGS3TZ--AYALcQrQ5moKMDciwCu8fk0F/view?usp=sharing'
       }
     ],
     geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
