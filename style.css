@@ -472,7 +472,10 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 12px 15px;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .back-header {
@@ -485,8 +488,8 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
   font-size: 0.9rem;
   letter-spacing: 1px;
   border-bottom: 1px solid var(--glow-inset);
-  padding-bottom: 6px;
-  margin-bottom: 12px;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .flip-btn-back {
@@ -504,10 +507,11 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
 /* CONTENEDOR GRID 2x2 */
 .week-grid-2x2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
-  height: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  flex: 1;
+  height: calc(100% - 35px);
 }
 
 /* TARJETAS DE SEMANA */
@@ -515,13 +519,16 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
   background: var(--glow-inset);
   border: 1px solid var(--primary-color);
   border-radius: 8px;
-  padding: 12px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   transition: all 0.3s ease;
   box-shadow: inset 0 0 8px var(--glow-inset);
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .week-card:hover {
@@ -535,8 +542,8 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
   background: var(--primary-color);
   color: #020814;
   font-weight: 800;
-  font-size: 0.75rem;
-  padding: 3px 8px;
+  font-size: 0.7rem;
+  padding: 2px 6px;
   border-radius: 4px;
   align-self: flex-start;
   letter-spacing: 0.5px;
@@ -557,17 +564,18 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
 
 /* BOTÓN DE FLECHA CIRCULAR INTERNO */
 .week-arrow-btn {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--primary-color);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   box-shadow: 0 0 8px var(--primary-color), inset 0 0 4px var(--primary-color);
   transition: all 0.25s ease;
+  align-self: flex-end;
 }
 
 .week-card:hover .week-arrow-btn {
@@ -575,6 +583,20 @@ a, button, .flip-btn, .week-card, .week-modal-close, .btn, .btn-submit, .btn-bac
   color: #050b14;
   box-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--primary-color);
   transform: scale(1.1);
+}
+
+.titulo-semana {
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 4px 0;
+    line-height: 1.15;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ==========================================
@@ -890,45 +912,322 @@ body.glow-red .btn-card-action {
   background: rgba(255, 0, 85, 0.15);
   color: #ff0055;
 }
-/* ==========================================
-   ADAPTABILIDAD RESPONSIVE (MEDIA QUERIES)
-   ========================================== */
-
-/* Ajustes para Pantallas Medianas (Tabletas / Laptops pequeñas) */
-@media screen and (max-width: 1024px) {
-  .unit-cube-3d {
-    width: 90%;
-    margin: 0 auto;
-  }
+/* ESTILOS DEL HEADER Y ELEMENTOS DEL DASHBOARD */
+.dashboard-header {
+  border-radius: 12px;
+  padding: 12px 24px;
 }
 
-/* Ajustes para Celulares */
-@media screen and (max-width: 768px) {
-  /* Contenedor del Modal */
-  .modal-card-box {
-    padding: 12px;
-  }
-
-  /* Ajuste de botones dentro de las tarjetas */
-  .btn-card-action {
-    width: 100%;
-    justify-content: center;
-  }
-
-  /* Tipografías adaptables */
-  h1 {
-    font-size: 1.8rem !important;
-  }
-
-  p, span {
-    font-size: 0.95rem;
-  }
+.dash-logo-box {
+  background: var(--glow-inset);
+  border: 1px solid var(--primary-color);
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--glow-shadow);
 }
 
-/* Ajustes para Celulares Pequeños */
-@media screen and (max-width: 480px) {
-  #weekModal .modal-content {
-    width: 95%;
-    padding: 15px;
-  }
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 243, 255, 0.08);
+  border: 1px solid var(--primary-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #fff;
+  box-shadow: inset 0 0 8px var(--glow-inset);
+}
+
+.role-tag {
+  background: var(--primary-color);
+  color: #020814;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 16px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.btn-logout {
+  background: rgba(255, 0, 60, 0.2) !important;
+  border-color: #ff003c !important;
+  color: #ff003c !important;
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.4) !important;
+}
+
+.btn-logout:hover {
+  background: #ff003c !important;
+  color: #fff !important;
+  box-shadow: 0 0 18px #ff003c !important;
+}
+
+.theme-toggle-btn {
+  background: rgba(2, 8, 20, 0.9);
+  border: 1.5px solid var(--primary-color);
+  color: var(--primary-color);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--primary-color);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1) rotate(15deg);
+}
+/* BOT FLOTANTE CONTENEDOR */
+.bot-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 25px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'Inter', sans-serif;
+}
+
+/* GLOBITO TOOLTIP */
+.bot-tooltip {
+  background: #ffffff;
+  color: #001f3f;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+  margin-bottom: 8px;
+  cursor: pointer;
+  animation: floatTooltip 3s ease-in-out infinite;
+  border: 1px solid var(--primary-color, #00f2fe);
+}
+
+@keyframes floatTooltip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* AVATAR ARTUERITO (R2-D2 CSS) */
+/* Botón flotante para la imagen real */
+.bot-avatar-btn {
+  width: 65px;
+  height: 65px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 2px solid #00f2fe;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 4px;
+}
+
+.bot-avatar-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 22px rgba(0, 242, 254, 0.8);
+}
+
+/* Ajuste de la imagen dentro del botón */
+.r2d2-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.r2-head {
+  width: 28px;
+  height: 14px;
+  background: #d0d0d0;
+  border-radius: 14px 14px 0 0;
+  border: 2px solid #0074d9;
+  position: relative;
+}
+
+.r2-eye {
+  width: 6px;
+  height: 6px;
+  background: #ff4136;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 11px;
+  box-shadow: 0 0 5px #ff4136;
+}
+
+.r2-detail {
+  width: 100%;
+  height: 3px;
+  background: #0074d9;
+  position: absolute;
+  bottom: 1px;
+}
+
+.r2-body {
+  width: 28px;
+  height: 16px;
+  background: #ffffff;
+  border: 2px solid #0074d9;
+  border-top: none;
+}
+
+.r2-chest {
+  width: 10px;
+  height: 8px;
+  background: #0074d9;
+  margin: 2px auto;
+  border-radius: 2px;
+}
+
+/* VENTANA DEL CHAT */
+.bot-chat-window {
+  display: none;
+  width: 330px;
+  height: 440px;
+  background: #0a0e1a;
+  border: 2px solid var(--primary-color, #00f2fe);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+}
+
+.bot-header {
+  background: #003366;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.bot-header-info { display: flex; align-items: center; gap: 8px; }
+
+.bot-status-dot {
+  width: 9px;
+  height: 9px;
+  background: #2ecc40;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #2ecc40;
+}
+
+.bot-header h4 { margin: 0; font-size: 0.95rem; }
+.bot-header small { opacity: 0.8; font-size: 0.7rem; }
+
+.bot-close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.bot-body {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: #e0e0e0;
+}
+
+.bot-msg {
+  padding: 8px 12px;
+  border-radius: 10px;
+  max-width: 85%;
+  line-height: 1.3;
+}
+
+.msg-bot {
+  background: #16243b;
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  align-self: flex-start;
+}
+
+.msg-user {
+  background: #0074d9;
+  color: white;
+  align-self: flex-end;
+}
+
+/* BOTONES DENTRO DEL CHAT */
+.bot-pills-grid {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.bot-pills-grid button {
+  background: transparent;
+  border: 1px solid var(--primary-color, #00f2fe);
+  color: var(--primary-color, #00f2fe);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.bot-subtext {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 5px;
+}
+
+.bot-units-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bot-unit-btn {
+  background: #111a2e;
+  border: 1px solid #1f3a60;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.bot-unit-btn:hover { border-color: var(--primary-color, #00f2fe); }
+
+.bot-footer {
+  padding: 10px;
+  background: #050811;
+  display: flex;
+  gap: 8px;
+}
+
+.bot-footer input {
+  flex: 1;
+  background: #111a2e;
+  border: 1px solid #1f3a60;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.bot-footer button {
+  background: #0074d9;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
