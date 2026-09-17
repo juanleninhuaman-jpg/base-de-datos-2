@@ -1,523 +1,702 @@
-// ==========================================
-// 1. MODO NEÓN / SABLE DE LUZ
-// ==========================================
-const glowToggle = document.getElementById('glow-toggle');
-if (glowToggle) {
-  glowToggle.addEventListener('click', () => {
-    document.body.classList.toggle('glow-red');
-  });
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio - Base de Datos II</title>
+  <!-- FAVICON DE LA UPLA -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/5gyh1RwF/logo-arriba.png">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
 
-// ==========================================
-// 2. EFECTO HIPERESPACIO / LOGIN MODAL
-// ==========================================
-function triggerHyperspaceLogin() {
-  const overlay = document.getElementById('hyperspaceOverlay');
-  if (overlay) {
-    overlay.classList.add('active');
+  <div class="space-background"></div>
+
+  <div id="hyperspaceOverlay" class="hyperspace-overlay">
+    <div class="star-warp-white"></div>
+    <div class="flash"></div>
+  </div>
+
+  <header class="header">
+    <div class="logo">PORTAFOLIO ESTUDIANTIL</div>
     
-    setTimeout(() => {
-      overlay.classList.remove('active');
-      const loginModal = document.getElementById('loginModal');
-      if (loginModal) loginModal.style.display = 'flex';
-    }, 1100);
-  }
-}
+    <div class="header-controls">
+      <button class="btn" onclick="triggerHyperspaceLogin()">
+        🔑 INICIAR SESIÓN
+      </button>
 
-// FUNCIÓN CORREGIDA: Cierra el modal y restablece el campo de contraseña
-function closeLoginModal() {
-  const loginModal = document.getElementById('loginModal');
-  if (loginModal) loginModal.style.display = 'none';
-
-  // Oculta la contraseña y resetea el ojito al cerrar
-  const passInput = document.getElementById('studentPass');
-  const toggleBtn = document.getElementById('togglePassBtn');
-
-  if (passInput) passInput.type = 'password';
-  if (toggleBtn) {
-    toggleBtn.textContent = '👁️';
-    toggleBtn.setAttribute('title', 'Mostrar contraseña');
-  }
-}
-
-// NUEVA FUNCIÓN: Ejecuta la rotación de pantalla completa y limpia la vista
-function handleLoginSuccess() {
-  closeLoginModal();
-
-  // Aplica la animación CSS de giro a la derecha sobre todo el sitio
-  document.body.classList.add('screen-flip-right');
-
-  // Espera 1.2 segundos (duración de la vuelta) y vacía el contenedor
-  setTimeout(() => {
-    document.body.innerHTML = `
-      <div id="empty-dashboard" style="min-height: 100vh; background: #0a0a12; color: #fff; display: flex; align-items: center; justify-content: center;">
-        <!-- Pantalla vacía lista para el nuevo contenido -->
+      <div id="glow-toggle" class="lightsaber-vertical" title="Haz clic para cambiar de lado de la Fuerza">
+        <div class="saber-blade-v"></div>
+        <div class="saber-hilt-v">
+          <div class="hilt-guard"></div>
+          <div class="hilt-grip"></div>
+          <div class="hilt-pommel"></div>
+        </div>
       </div>
-    `;
-    document.body.classList.remove('screen-flip-right');
-  }, 1200);
-}
+    </div>
+  </header>
 
-// ==========================================
-// 3. ROTACIÓN Y FLIP DE TARJETAS DE UNIDADES
-// ==========================================
-function toggleFlip(unitId) {
-  const unit = document.getElementById(unitId);
-  if (unit) unit.classList.toggle('flipped');
-}
+  <section class="cube-container">
+    <div class="cube" id="main3DCube">
+      <div class="cube-face face-front">
+        <h1 class="title">BIENVENIDO AL PORTAFOLIO</h1>
+        <p class="subtitle">Base de Datos II - Universidad Peruana Los Andes</p>
+      </div>
 
-function flipCube(element) {
-  if (element) element.classList.toggle('flipped');
-}
+      <div class="cube-face face-back">
+        <div class="upla-content">
+          <p class="upla-header">UNIVERSIDAD PERUANA LOS ANDES</p>
+          <div class="upla-logo-box">
+            <img src="https://i.ibb.co/9LcQzSv/logo-upla.jpg" alt="Escudo UPLA" class="upla-img-logo">
+            <p class="upla-footer">UPLA - 2026</p>
+          </div>
+        </div>
+      </div>
 
-function flipUnitCube(buttonElement) {
-  const card = buttonElement.closest('.unit-cube-3d');
-  if (card) card.classList.toggle('flipped');
-}
+      <div class="cube-face face-right">
+        <p class="side-text">
+          FACULTAD DE<br>INGENIERÍA
+        </p>
+      </div>
 
-function rotateUnitCube(cubeId) {
-  const cube = document.getElementById(cubeId);
-  if (cube) cube.classList.add('show-back');
-}
+      <div class="cube-face face-left">
+        <p class="side-text">
+          ESCUELA PROFESIONAL<br>
+          DE INGENIERÍA DE<br>
+          SISTEMAS Y COMPUTACIÓN
+        </p>
+      </div>
 
-function resetUnitCube(cubeId) {
-  const cube = document.getElementById(cubeId);
-  if (cube) cube.classList.remove('show-back');
-}
+      <div class="cube-face face-bottom"></div>
 
-function toggleWeeks(element) {
-  const card = element.parentElement;
-  if (card) card.classList.toggle('active');
-}
+      <div class="base-platform"></div>
+    </div>
+  </section>
 
-// ==========================================
-// 4. CONFIGURACIÓN Y VENTANA EMERGENTE (MODAL) DEL PDF Y GENIALLY
-// ==========================================
+  <section class="profile-container">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="avatar-frame">
+          <img src="https://i.ibb.co/pv5mfz79/mi-foto.jpg" alt="Juan Lenin Huaman Quispe" class="profile-photo">
+        </div>
+        <div class="profile-title">
+          <h2><i class="fa-solid fa-graduation-cap"></i> Juan Lenin Huaman Quispe</h2>
+          <p class="highlight"><i class="fa-solid fa-building-columns"></i> V Ciclo - Ingeniería de Sistemas y Computación</p>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="about-me">
+        <h3><i class="fa-solid fa-user-graduate"></i> SOBRE MÍ</h3>
+        <p>¡Hola! Soy estudiante de <strong>Ingeniería de Sistemas y Computación</strong>. interesado en el desarrollo de soluciones tecnológicas y en el aprendizaje de nuevas herramientas informáticas. Me gusta trabajar en proyectos relacionados con el desarrollo de software, diseño de interfaces y gestión de bases de datos.</p>
+        <p>Durante mi formación universitaria he adquirido conocimientos en <strong>programación, bases de datos, desarrollo web y diseño web,</strong> aplicándolos en diferentes proyectos académicos. Me considero una persona responsable, creativa y con disposición para aprender y mejorar constantemente.</p>
+      </div>
 
-const semanasInfo = {
-  'Semana 1': {
-    actividades: [
-      {
-        actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Arquitectura de Base de Datos',
-        pdfRuta: 'https://drive.google.com/file/d/1NPRs3-o-HmrYQu2CagkQ0Isp-4g1Xas3/view?usp=sharing'
-      },
-      {
-        actividad: 'ACTIVIDAD 02',
-        pdfTitulo: 'Base de Datos',
-        pdfRuta: 'https://drive.google.com/file/d/1eGS3TZ--AYALcQrQ5moKMDciwCu8fk0F/view?usp=sharing'
-      }
-    ],
-    geniallyTitulo: 'Resumen de Arquitectura de Base de Datos',
-    geniallyLink: 'https://view.genially.com/6aa1b61aac454a031b87e6de'
-  },
-  'Semana 2': {
-    actividades: [
-      {
-        actividad: 'ACTIVIDAD 01',
-        pdfTitulo: 'Reglamento General de Grados y Títulos de Pregrado',
-        pdfRuta: 'https://drive.google.com/file/d/13LwHMIb-DwGgyZL0KIX7OaQQSMFJDa24/view?usp=sharing'
-      },
-      {
-        actividad: 'ACTIVIDAD 02',
-        pdfTitulo: 'Los Gestores de Base de Datos DBMS',
-        pdfRuta: 'https://drive.google.com/file/d/1n4kpDW22UB9oHBbVRWj7X5Jt1DbJ_NKn/view?usp=sharing'
-      },
-      {
-        actividad: 'ACTIVIDAD 03',
-        pdfTitulo: 'Manual de instalaciones de MS - SQL Server',
-        pdfRuta: 'https://drive.google.com/file/d/1dcmkaa6Ydmz_4oPojTVz6pJtGDUoTw9w/view?usp=sharing'
-      }
-    ]
-  }
-};
+      <div class="skills-grid">
+        <div class="skill-card">
+          <i class="fa-solid fa-code skill-icon"></i>
+          <div>
+            <h4>Programación</h4>
+            <p>Java / C# Básico-Intermedio</p>
+          </div>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-users skill-icon"></i>
+          <div>
+            <h4>Liderazgo</h4>
+            <p>Trabajo en equipo y organización</p>
+          </div>
+        </div>
+        <div class="skill-card">
+          <i class="fa-solid fa-bullseye skill-icon"></i>
+          <div>
+            <h4>Objetivo</h4>
+            <p>Desarrollo de Software y diseñador de pagina web</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-function openWeekModal(weekName) {
-  const modal = document.getElementById('weekModal');
-  const modalTitle = document.getElementById('modalWeekTitle');
-  const modalDesc = document.getElementById('modalGeniallyDesc');
-  const modalLink = document.getElementById('modalGeniallyLink');
+  <!-- SECCIÓN DE UNIDADES DE APRENDIZAJE -->
+  <section class="units-section">
+    <h2 class="section-title">UNIDADES DE APRENDIZAJE</h2>
+    <div class="units-grid">
 
-  if (modal && modalTitle) {
-    modalTitle.textContent = weekName.replace(/^📅\s*/, '');
+      <!-- UNIDAD 1 -->
+      <div class="unit-cube-3d" id="unit1">
+        <div class="cube-inner">
+          <div class="cube-front">
+            <div class="unit-info">
+              <h3>UNIDAD 1</h3>
+              <p>Arquitecturas de Bases de Datos y Configuración del Entorno Corporativo</p>
+            </div>
+            <button class="flip-btn" onclick="toggleFlip('unit1')">&#10095;</button>
+          </div>
+          <div class="cube-back">
+            <div class="back-header">
+              <span>SEMANAS 1 - 4</span>
+              <button class="flip-btn-back" onclick="toggleFlip('unit1')">✕</button>
+            </div>
+            <div class="week-grid-2x2">
+              <div class="week-card" onclick="openWeekModal('Semana 1')">
+                <span class="week-badge">Semana 1</span>
+                <h3 class="titulo-semana">Formulación del Proyecto y Selección de la Arquitectura</h3>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
 
-    if (modalLink) modalLink.style.display = 'none';
+              <div class="week-card" onclick="openWeekModal('Semana 2')">
+                <span class="week-badge">Semana 2</span>
+                <h3 class="titulo-semana">Despliegue y Configuración de Motores de Datos (DBMS)</h3>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
 
-    if (semanasInfo[weekName]) {
-      const info = semanasInfo[weekName];
-      let contenidoHTML = `<div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">`;
+              <div class="week-card" onclick="openWeekModal('Semana 3')">
+                <span class="week-badge">Semana 3</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
 
-      // RECORRE Y CREA TODAS LAS ACTIVIDADES/PDFs DE LA SEMANA
-      if (info.actividades && info.actividades.length > 0) {
-        info.actividades.forEach(act => {
-          contenidoHTML += `
-            <div class="modal-card-box">
-              <span class="activity-badge">${act.actividad || 'ACTIVIDAD'}</span>
-              <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-file-pdf" style="color: #ff4757; font-size: 1.2rem;"></i>
-                ${act.pdfTitulo}
-              </p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="${act.pdfRuta}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
-                  <i class="fa-solid fa-eye"></i> Ver PDF
-                </a>
+              <div class="week-card" onclick="openWeekModal('Semana 4')">
+                <span class="week-badge">Semana 4</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
               </div>
             </div>
-          `;
-        });
-      }
-
-      // TARJETA DE GENIALLY (Si existe)
-      if (info.geniallyLink) {
-        contenidoHTML += `
-          <div class="modal-card-box">
-            <p style="margin: 0 0 12px 0; font-weight: bold; font-size: 1rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-solid fa-laptop-code" style="font-size: 1.2rem;"></i>
-              ${info.geniallyTitulo}
-            </p>
-            <a href="${info.geniallyLink}" target="_blank" rel="noopener noreferrer" class="btn-card-action">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir en Genially
-            </a>
           </div>
-        `;
-      }
-
-      contenidoHTML += `</div>`;
-
-      if (modalDesc) {
-        modalDesc.innerHTML = contenidoHTML;
-      }
-    } else {
-      if (modalDesc) {
-        modalDesc.innerHTML = `<i class="fa-regular fa-comment"></i> No hay contenido registrado para esta semana.`;
-      }
-    }
-
-    modal.classList.add('active');
-    modal.style.display = 'flex';
-  }
-}
-
-function closeWeekModal() {
-  const modal = document.getElementById('weekModal');
-  if (modal) {
-    modal.classList.remove('active');
-    modal.style.display = 'none';
-  }
-}
-
-// ==========================================
-// 5. CERRAR MODALES AL HACER CLIC FUERA
-// ==========================================
-window.addEventListener('click', (event) => {
-  const weekModal = document.getElementById('weekModal');
-  const loginModal = document.getElementById('loginModal');
-
-  if (event.target === weekModal) {
-    closeWeekModal();
-  }
-  
-  if (event.target === loginModal) {
-    closeLoginModal();
-  }
-});
-
-// ==========================================
-// 6. MOVIMIENTO DE LUZ DEL CURSOR
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  const cursorGlow = document.getElementById('cursorGlow');
-
-  if (cursorGlow) {
-    window.addEventListener('mousemove', (e) => {
-      cursorGlow.style.left = `${e.clientX}px`;
-      cursorGlow.style.top = `${e.clientY}px`;
-    });
-  }
-});
-
-// ==========================================
-// 7. CONTROL DE SESIÓN Y VISTAS (LOGIN Y DASHBOARD)
-// ==========================================
-function validarLogin() {
-  const codeInput = document.getElementById('studentCode');
-  const passInput = document.getElementById('studentPass');
-  const errorMsg = document.getElementById('loginError');
-
-  if (!codeInput || !passInput) return;
-
-  const code = codeInput.value.trim();
-  const pass = passInput.value.trim();
-
-  // Verificación de credenciales
-  if (code === 'T00047H' && pass === 'sistemas') {
-    if (errorMsg) errorMsg.style.display = 'none';
-
-    // 1. Ocultar el modal de login
-    closeLoginModal();
-
-    // 2. Ocultar todas las secciones del Portafolio (Landing Page)
-    document.querySelectorAll('header, section, footer').forEach(el => {
-      if (el.parentElement.id !== 'dashboardView') {
-        el.style.display = 'none';
-      }
-    });
-
-    // 3. Mostrar el Dashboard de Administración
-    const dashboardView = document.getElementById('dashboardView');
-    if (dashboardView) {
-      dashboardView.style.display = 'block';
-    }
-  } else {
-    // Muestra mensaje de error en el modal
-    if (errorMsg) {
-      errorMsg.style.display = 'block';
-    } else {
-      alert('Código o contraseña incorrectos.');
-    }
-  }
-}
-
-function cerrarSesion() {
-  // 1. Ocultar Dashboard
-  const dashboardView = document.getElementById('dashboardView');
-  if (dashboardView) dashboardView.style.display = 'none';
-
-  // 2. Mostrar nuevamente todas las secciones de la Landing Page
-  document.querySelectorAll('header, section, footer').forEach(el => {
-    if (el.parentElement.id !== 'dashboardView') {
-      el.style.display = '';
-    }
-  });
-
-  // 3. Reabrir modal de Login
-  const loginModal = document.getElementById('loginModal');
-  if (loginModal) {
-    loginModal.style.display = 'flex';
-  }
-}
-
-function irAlPortal() {
-  // Oculta Dashboard y regresa a la página inicial
-  const dashboardView = document.getElementById('dashboardView');
-  if (dashboardView) dashboardView.style.display = 'none';
-
-  document.querySelectorAll('header, section, footer').forEach(el => {
-    if (el.parentElement.id !== 'dashboardView') {
-      el.style.display = '';
-    }
-  });
-}
-
-// ==========================================
-// 8. CAMBIO DE TEMA Y PERSISTENCIA (AZUL / ROJO)
-// ==========================================
-function toggleRedTheme() {
-  document.body.classList.toggle('red-theme');
-  
-  const isRed = document.body.classList.contains('red-theme');
-  localStorage.setItem('theme', isRed ? 'red' : 'blue');
-}
-
-// Carga el tema guardado al abrir o recargar la página
-window.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('theme') === 'red') {
-    document.body.classList.add('red-theme');
-  }
-  
-  // Asegurar la escucha para la espada del Dashboard
-  const saberDash = document.getElementById('glow-toggle-dash');
-  if (saberDash) {
-    saberDash.addEventListener('click', toggleRedTheme);
-  }
-});
-
-// ==========================================
-// 9. ALTERNAR VISIBILIDAD DE CONTRASEÑA (OJITO)
-// ==========================================
-function togglePasswordVisibility() {
-  const passInput = document.getElementById('studentPass');
-  const toggleBtn = document.getElementById('togglePassBtn');
-
-  if (!passInput || !toggleBtn) return;
-
-  // Si es tipo password, lo cambia a text (muestra texto)
-  if (passInput.type === 'password') {
-    passInput.type = 'text';
-    toggleBtn.textContent = '🙈'; // Cambia icono al presionar
-    toggleBtn.setAttribute('title', 'Ocultar contraseña');
-  } else {
-    // Si es tipo text, vuelve a password (oculta texto con asteriscos)
-    passInput.type = 'password';
-    toggleBtn.textContent = '👁️';
-    toggleBtn.setAttribute('title', 'Mostrar contraseña');
-  }
-}
-
-// Limpiar inputs
-// Agrega o asegúrate de tener esta función auxiliar para vaciar las cajas
-function resetLoginForm() {
-  const codeInput = document.getElementById('studentCode');
-  const passInput = document.getElementById('studentPass');
-  const errorMsg = document.getElementById('loginError');
-
-  if (codeInput) codeInput.value = '';
-  if (passInput) {
-    passInput.value = '';
-    passInput.type = 'password';
-  }
-  if (errorMsg) errorMsg.style.display = 'none';
-
-  const toggleBtn = document.getElementById('togglePassBtn');
-  if (toggleBtn) {
-    toggleBtn.textContent = '👁️';
-    toggleBtn.setAttribute('title', 'Mostrar contraseña');
-  }
-}
-
-// Actualiza closeLoginModal para que limpie los campos
-function closeLoginModal() {
-  const loginModal = document.getElementById('loginModal');
-  if (loginModal) loginModal.style.display = 'none';
-
-  resetLoginForm(); // Limpia campos al cerrar
-}
-
-// Actualiza validarLogin para limpiar los campos si el acceso es correcto
-function validarLogin() {
-  const codeInput = document.getElementById('studentCode');
-  const passInput = document.getElementById('studentPass');
-  const errorMsg = document.getElementById('loginError');
-
-  if (!codeInput || !passInput) return;
-
-  const code = codeInput.value.trim();
-  const pass = passInput.value.trim();
-
-  if (code === 'T00047H' && pass === 'sistemas') {
-    if (errorMsg) errorMsg.style.display = 'none';
-
-    // 1. Limpiar inputs antes de ocultar
-    resetLoginForm();
-
-    // 2. Ocultar el modal de login
-    closeLoginModal();
-
-    // 3. Ocultar el resto del portafolio y mostrar Dashboard
-    document.querySelectorAll('header, section, footer').forEach(el => {
-      if (el.parentElement.id !== 'dashboardView') {
-        el.style.display = 'none';
-      }
-    });
-
-    const dashboardView = document.getElementById('dashboardView');
-    if (dashboardView) {
-      dashboardView.style.display = 'block';
-    }
-  } else {
-    if (errorMsg) {
-      errorMsg.style.display = 'block';
-    } else {
-      alert('Código o contraseña incorrectos.');
-    }
-  }
-}
-
-// Actualiza irAlPortal para limpiar el formulario cuando presionas Salir
-function irAlPortal() {
-  const dashboardView = document.getElementById('dashboardView');
-  if (dashboardView) dashboardView.style.display = 'none';
-
-  document.querySelectorAll('header, section, footer').forEach(el => {
-    if (el.parentElement.id !== 'dashboardView') {
-      el.style.display = '';
-    }
-  });
-
-  resetLoginForm(); // Garantiza que si reabres la ventana esté vacía
-}
-// ==========================================
-// CHATBOT FLOTANTE ARTUERITO (DATABOT R2)
-// ==========================================
-function toggleChatbot() {
-  const win = document.getElementById('botChatWindow');
-  if (win) {
-    win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-  }
-}
-
-function appendBotMessage(text, isUser = false) {
-  const box = document.getElementById('botMessages');
-  if (!box) return;
-
-  const msg = document.createElement('div');
-  msg.className = `bot-msg ${isUser ? 'msg-user' : 'msg-bot'}`;
-  msg.innerHTML = text;
-  box.appendChild(msg);
-  box.scrollTop = box.scrollHeight;
-}
-
-function botSelectOption(tipo) {
-  if (tipo === 'conceptos') {
-    appendBotMessage('🗂️ Conceptos: Los DBMS (Sistemas Gestores) administran almacenamiento, seguridad e integridad de datos.');
-  } else if (tipo === 'sql') {
-    appendBotMessage('&lt;/&gt; SQL: Lenguaje de consulta estructurado para definir (DDL) y manipular (DML) datos.');
-  } else if (tipo === 'resumen') {
-    appendBotMessage('📋 Resumen actual: Estás en la Unidad 1 (Arquitectura de Base de Datos) - Semanas 1 y 2.');
-  }
-}
-
-function botSelectUnit(num) {
-  appendBotMessage(`<b>Unidad ${num} seleccionada</b>`, true);
-
-  if (num === 1) {
-    appendBotMessage(`
-      ✅ Abriendo Unidad 1:<br>
-      Selecciona una semana:
-      <div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap;">
-        <button onclick="botShowWeek(1)" style="padding:3px 8px; border-radius:6px; border:1px solid #00f2fe; background:transparent; color:#00f2fe; cursor:pointer;">Semana 1</button>
-        <button onclick="botShowWeek(2)" style="padding:3px 8px; border-radius:6px; border:1px solid #00f2fe; background:transparent; color:#00f2fe; cursor:pointer;">Semana 2</button>
+        </div>
       </div>
-    `);
-  } else {
-    appendBotMessage(`⚠️ Las semanas de la Unidad ${num} se habilitarán en las siguientes sesiones.`);
-  }
-}
 
-function botShowWeek(numSemana) {
-  const infoSemana = semanasInfo[`Semana ${numSemana}`];
-  if (infoSemana && infoSemana.actividades) {
-    let respuesta = `📄 <b>Archivos de la Semana ${numSemana}:</b><br>`;
-    infoSemana.actividades.forEach(act => {
-      respuesta += `• <a href="${act.pdfRuta}" target="_blank" style="color:#00f2fe;">${act.pdfTitulo}</a><br>`;
-    });
-    appendBotMessage(respuesta);
-  } else {
-    appendBotMessage(`No hay archivos registrados para la Semana ${numSemana}.`);
-  }
-}
+      <!-- UNIDAD 2 -->
+      <div class="unit-cube-3d" id="unit2">
+        <div class="cube-inner">
+          <div class="cube-front">
+            <div class="unit-info">
+              <h3>UNIDAD 2</h3>
+              <p>....</p>
+            </div>
+            <button class="flip-btn" onclick="toggleFlip('unit2')">&#10095;</button>
+          </div>
+          <div class="cube-back">
+            <div class="back-header">
+              <span>SEMANAS 5 - 8</span>
+              <button class="flip-btn-back" onclick="toggleFlip('unit2')">✕</button>
+            </div>
+            <div class="week-grid-2x2">
+              <div class="week-card" onclick="openWeekModal('Semana 5')">
+                <span class="week-badge">Semana 5</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 6')">
+                <span class="week-badge">Semana 6</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 7')">
+                <span class="week-badge">Semana 7</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 8')">
+                <span class="week-badge">Semana 8</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-function sendBotUserMsg() {
-  const input = document.getElementById('botInput');
-  if (!input) return;
-  const txt = input.value.trim();
-  if (!txt) return;
+      <!-- UNIDAD 3 -->
+      <div class="unit-cube-3d" id="unit3">
+        <div class="cube-inner">
+          <div class="cube-front">
+            <div class="unit-info">
+              <h3>UNIDAD 3</h3>
+              <p>....</p>
+            </div>
+            <button class="flip-btn" onclick="toggleFlip('unit3')">&#10095;</button>
+          </div>
+          <div class="cube-back">
+            <div class="back-header">
+              <span>SEMANAS 9 - 12</span>
+              <button class="flip-btn-back" onclick="toggleFlip('unit3')">✕</button>
+            </div>
+            <div class="week-grid-2x2">
+              <div class="week-card" onclick="openWeekModal('Semana 9')">
+                <span class="week-badge">Semana 9</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 10')">
+                <span class="week-badge">Semana 10</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 11')">
+                <span class="week-badge">Semana 11</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 12')">
+                <span class="week-badge">Semana 12</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  appendBotMessage(txt, true);
-  input.value = '';
+      <!-- UNIDAD 4 -->
+      <div class="unit-cube-3d" id="unit4">
+        <div class="cube-inner">
+          <div class="cube-front">
+            <div class="unit-info">
+              <h3>UNIDAD 4</h3>
+              <p>....</p>
+            </div>
+            <button class="flip-btn" onclick="toggleFlip('unit4')">&#10095;</button>
+          </div>
+          <div class="cube-back">
+            <div class="back-header">
+              <span>SEMANAS 13 - 16</span>
+              <button class="flip-btn-back" onclick="toggleFlip('unit4')">✕</button>
+            </div>
+            <div class="week-grid-2x2">
+              <div class="week-card" onclick="openWeekModal('Semana 13')">
+                <span class="week-badge">Semana 13</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 14')">
+                <span class="week-badge">Semana 14</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 15')">
+                <span class="week-badge">Semana 15</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+              <div class="week-card" onclick="openWeekModal('Semana 16')">
+                <span class="week-badge">Semana 16</span>
+                <div class="week-arrow-btn">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  setTimeout(() => {
-    const query = txt.toLowerCase();
-    if (query.includes('hola') || query.includes('buenas')) {
-      appendBotMessage('¡Hola! Beep-boop 🤖 ¿En qué te puedo colaborar hoy?');
-    } else if (query.includes('pdf') || query.includes('tarea') || query.includes('semana')) {
-      appendBotMessage('Puedes revisar el material de las Semanas 1 y 2 seleccionando la Unidad 1 arriba.');
-    } else {
-      appendBotMessage('Procesando consulta... Te sugiero explorar las opciones de la Unidad 1.');
-    }
-  }, 600);
-}
+    </div>
+  </section>
 
-function handleBotKey(e) {
-  if (e.key === 'Enter') sendBotUserMsg();
-}
+  <!-- ESTRUCTURA DEL MODAL POP-UP ESTILO NEÓN -->
+  <div id="weekModal" class="week-modal-overlay">
+    <div class="week-modal-card">
+      <div class="week-modal-header">
+        <div class="week-modal-title">
+          <span class="calendar-icon">📅</span>
+          <h3 id="modalWeekTitle">Semana 1</h3>
+        </div>
+        <button class="week-modal-close" onclick="closeWeekModal()" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="week-modal-body" id="modalWeekBody">
+        <div id="modalGeniallyDesc" class="modal-desc"></div>
+        <a id="modalGeniallyLink" class="modal-link" href="#" target="_blank"></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE INICIO DE SESIÓN -->
+  <div id="loginModal" class="modal-overlay">
+    <div class="login-card-centered">
+      <div class="modal-header">
+        <h3>ACCESO ADMINISTRADOR</h3>
+        <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- SE AGREGÓ EL EVENTO ONSUBMIT AQUÍ PARA PROCESAR EL ENTER -->
+        <form id="adminLoginForm" autocomplete="off" onsubmit="event.preventDefault(); validarLogin();" style="display: flex; flex-direction: column; gap: 12px;">
+          
+          <div class="input-group" style="width: 100%;">
+            <input 
+              type="text" 
+              id="studentCode" 
+              placeholder="Código de Estudiante" 
+              class="pixel-input"
+              autocomplete="off" 
+              oninput="this.value = this.value.toUpperCase();" 
+              style="width: 100%; text-transform: uppercase;"
+            >
+          </div>
+
+          <div class="input-group" style="position: relative; width: 100%;">
+            <input 
+              type="password" 
+              id="studentPass" 
+              placeholder="Contraseña" 
+              class="pixel-input"
+              autocomplete="new-password" 
+              readonly 
+              onfocus="this.removeAttribute('readonly');" 
+              style="width: 100%; padding-right: 45px;"
+            >
+            <button 
+              type="button" 
+              id="togglePassBtn" 
+              onclick="togglePasswordVisibility()" 
+              style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--primary-color); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center;"
+              title="Mostrar / Ocultar Contraseña"
+            >
+              👁️
+            </button>
+          </div>
+
+          <!-- EL BOTÓN ES TIPO SUBMIT O MANTIENE EL CLIC DE VALIDACIÓN -->
+          <button class="btn btn-submit" type="submit">INGRESAR</button>
+          <button class="btn btn-back" type="button" onclick="closeLoginModal()">Volver al Frente ↺</button>
+          
+          <p id="loginError" style="color: #ff0055; font-size: 0.8rem; margin-top: 5px; display: none;">
+            Código o contraseña incorrectos.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <!-- FOOTER PIE DE PÁGINA -->
+  <footer class="footer-bar">
+    <div class="footer-content">
+      <i class="fa-solid fa-graduation-cap footer-icon"></i>
+      <span>Universidad Peruana Los Andes - Base de Datos II</span>
+    </div>
+  </footer>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- CONTENEDOR PRINCIPAL DEL DASHBOARD -->
+  <div id="dashboardView" style="display: none; width: 100%; min-height: 100vh; position: relative; z-index: 10;">
+    
+    <!-- ENCABEZADO PANEL DE ADMINISTRACIÓN -->
+    <header class="header dashboard-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; width: 100%;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="dash-logo-box" style="width: 45px; height: 45px; padding: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--primary-color); border-radius: 8px; box-sizing: border-box; background: rgba(0,0,0,0.3);">
+          <img src="https://i.ibb.co/5gyh1RwF/logo-arriba.png" alt="UPLA Logo" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+        </div>
+        <div>
+          <div class="logo" style="margin: 0; font-size: 1.1rem; text-transform: uppercase;">PANEL DE ADMINISTRACIÓN</div>
+          <span class="subtitle" style="font-size: 0.75rem;">Sistemas & Base de Datos II</span>
+        </div>
+      </div>
+
+      <div class="header-controls" style="display: flex; align-items: center; gap: 12px;">
+        <div class="user-badge">
+          <span style="font-size: 0.9rem;">👤</span>
+          <span id="userDisplayCode">juanleninhuaman@gmail.com</span>
+        </div>
+        <span class="role-tag">ADMINISTRADOR</span>
+        <div id="glow-toggle-dash" class="lightsaber-vertical" onclick="toggleRedTheme()" title="Cambiar tema de color" style="cursor: pointer; position: relative; z-index: 99; display: inline-block;">
+          <div class="saber-blade-v" style="pointer-events: none;"></div>
+          <div class="saber-hilt-v" style="pointer-events: none;"></div>
+        </div>
+        <button class="btn btn-logout" type="button" onclick="irAlPortal()" title="Volver al Portafolio" style="padding: 8px 16px; font-weight: bold; cursor: pointer;">
+          Salir
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENIDO DASHBOARD -->
+    <main style="max-width: 1000px; margin: 30px auto; padding: 0 20px; width: 100%;">
+      
+      <!-- CARD: SUBIR TRABAJO -->
+      <div class="dash-card">
+        <h2 class="dash-card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Subir Trabajo</h2>
+
+        <!-- SELECTOR TIPO (ARCHIVO / ENLACE) -->
+        <div class="type-selector-grid">
+          <button type="button" class="type-btn active" id="btn-tipo-archivo" onclick="cambiarTipoSubida('archivo')">
+            <i class="fa-solid fa-file-arrow-up"></i> Archivo
+          </button>
+          <button type="button" class="type-btn" id="btn-tipo-enlace" onclick="cambiarTipoSubida('enlace')">
+            <i class="fa-solid fa-link"></i> Enlace
+          </button>
+        </div>
+
+        <!-- DESPLEGABLES DE LAS 4 UNIDADES -->
+        <div class="form-group">
+          <label class="dash-label">Seleccionar Unidad y Semana:</label>
+          <select id="dashSelectUnidadSemana" class="dash-select">
+            <optgroup label="Unidad I: Arquitecturas BD">
+              <option value="Semana 1">Unidad I - Semana 1</option>
+              <option value="Semana 2" selected>Unidad I - Semana 2</option>
+              <option value="Semana 3">Unidad I - Semana 3</option>
+              <option value="Semana 4">Unidad I - Semana 4</option>
+            </optgroup>
+            <optgroup label="Unidad II: Consultas Avanzadas">
+              <option value="Semana 5">Unidad II - Semana 5</option>
+              <option value="Semana 6">Unidad II - Semana 6</option>
+              <option value="Semana 7">Unidad II - Semana 7</option>
+              <option value="Semana 8">Unidad II - Semana 8</option>
+            </optgroup>
+            <optgroup label="Unidad III: Optimización">
+              <option value="Semana 9">Unidad III - Semana 9</option>
+              <option value="Semana 10">Unidad III - Semana 10</option>
+              <option value="Semana 11">Unidad III - Semana 11</option>
+              <option value="Semana 12">Unidad III - Semana 12</option>
+            </optgroup>
+            <optgroup label="Unidad IV: Administración">
+              <option value="Semana 13">Unidad IV - Semana 13</option>
+              <option value="Semana 14">Unidad IV - Semana 14</option>
+              <option value="Semana 15">Unidad IV - Semana 15</option>
+              <option value="Semana 16">Unidad IV - Semana 16</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div class="form-group">
+          <label class="dash-label">Descripción (opcional):</label>
+          <input type="text" id="dashInputDesc" class="dash-input" placeholder="Describe brevemente el trabajo..." autocomplete="off">
+        </div>
+
+        <!-- ÁREA DE CARGA: ARCHIVO -->
+        <div id="dashAreaArchivo" class="dash-dropzone" onclick="document.getElementById('dashFileInput').click()">
+          <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+          <p class="drop-main-text">Arrastra archivos aquí o haz clic</p>
+          <p class="drop-sub-text">PDF, DOC, ZIP, SQL – Max 10MB</p>
+          <input type="file" id="dashFileInput" style="display: none;" onchange="mostrarNombreArchivo(this)">
+          <p id="dashFileNameDisplay" class="file-name-tag"></p>
+        </div>
+
+        <!-- ÁREA DE CARGA: ENLACE -->
+        <div id="dashAreaEnlace" class="form-group" style="display: none;">
+          <label class="dash-label">URL del recurso:</label>
+          <input type="url" id="dashInputUrl" class="dash-input" placeholder="https://view.genially.com/..." autocomplete="off">
+        </div>
+
+        <button type="button" class="btn btn-submit" onclick="subirTrabajoDashboard()" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 1rem;">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i> Subir Trabajo
+        </button>
+      </div>
+
+      <!-- CARD: EDITAR NOMBRES DE UNIDADES Y SEMANAS -->
+      <div class="dash-card" style="margin-top: 30px;">
+        <h2 class="dash-card-title"><i class="fa-solid fa-pen-to-square"></i> Editar Nombres de Unidades y Semanas</h2>
+        <p class="subtitle" style="margin-bottom: 15px;">Modifica los títulos del portafolio en tiempo real desde el panel.</p>
+
+        <div class="form-group">
+          <label class="dash-label">Seleccionar Elemento a Editar:</label>
+          <select id="dashEditSelect" class="dash-select" onchange="cargarNombreEnInput()">
+            <optgroup label="Unidades (Título y Descripción)">
+              <option value="U1">Unidad 1</option>
+              <option value="U2">Unidad 2</option>
+              <option value="U3">Unidad 3</option>
+              <option value="U4">Unidad 4</option>
+            </optgroup>
+            <optgroup label="Semanas (Título)">
+              <option value="Semana 1">Semana 1</option>
+              <option value="Semana 2">Semana 2</option>
+              <option value="Semana 3">Semana 3</option>
+              <option value="Semana 4">Semana 4</option>
+              <option value="Semana 5">Semana 5</option>
+              <option value="Semana 6">Semana 6</option>
+              <option value="Semana 7">Semana 7</option>
+              <option value="Semana 8">Semana 8</option>
+              <option value="Semana 9">Semana 9</option>
+              <option value="Semana 10">Semana 10</option>
+              <option value="Semana 11">Semana 11</option>
+              <option value="Semana 12">Semana 12</option>
+              <option value="Semana 13">Semana 13</option>
+              <option value="Semana 14">Semana 14</option>
+              <option value="Semana 15">Semana 15</option>
+              <option value="Semana 16">Semana 16</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="dash-label">Nuevo Título / Nombre:</label>
+          <input type="text" id="dashInputNuevoTitulo" class="dash-input" placeholder="Ej. Formulación del Proyecto..." autocomplete="off">
+        </div>
+
+        <div class="form-group" id="groupDescUnidad" style="display: block;">
+          <label class="dash-label">Descripción de la Unidad:</label>
+          <input type="text" id="dashInputNuevaDesc" class="dash-input" placeholder="Ej. Arquitecturas de Bases de Datos..." autocomplete="off">
+        </div>
+
+        <button type="button" class="btn btn-submit" onclick="guardarCambiosNombreDashboard()" style="width: 100%; margin-top: 10px; padding: 12px;">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+        </button>
+      </div>
+
+      <!-- CARD: RESUMEN Y TABLA PORTAFOLIO -->
+      <div class="dash-card" style="margin-top: 30px;">
+        <h2 class="dash-card-title"><i class="fa-solid fa-list-check"></i> Portafolio Estudiantil</h2>
+        <p class="subtitle" style="margin-bottom: 20px;">Gestiona los trabajos registrados de forma eficiente.</p>
+
+        <!-- CONTADORES -->
+        <div class="stats-row">
+          <div class="stat-box">
+            <span class="stat-num" id="dashTotalCount">0</span>
+            <span class="stat-label">Total Subidos</span>
+          </div>
+          <div class="stat-box orange">
+            <span class="stat-num" id="dashPendingCount">0</span>
+            <span class="stat-label">Pendientes</span>
+          </div>
+        </div>
+
+        <!-- FILTRO POR SEMANA (1 A 16) -->
+        <div class="form-group" style="margin-top: 20px;">
+          <label class="dash-label"><i class="fa-solid fa-filter"></i> Filtrar por Semana:</label>
+          <select id="dashFiltroSemana" class="dash-select" onchange="renderizarTablaDashboard()">
+            <option value="todas">Todas las Semanas</option>
+            
+            <optgroup label="Unidad I">
+              <option value="Semana 1">Semana 1</option>
+              <option value="Semana 2" selected>Semana 2</option>
+              <option value="Semana 3">Semana 3</option>
+              <option value="Semana 4">Semana 4</option>
+            </optgroup>
+
+            <optgroup label="Unidad II">
+              <option value="Semana 5">Semana 5</option>
+              <option value="Semana 6">Semana 6</option>
+              <option value="Semana 7">Semana 7</option>
+              <option value="Semana 8">Semana 8</option>
+            </optgroup>
+
+            <optgroup label="Unidad III">
+              <option value="Semana 9">Semana 9</option>
+              <option value="Semana 10">Semana 10</option>
+              <option value="Semana 11">Semana 11</option>
+              <option value="Semana 12">Semana 12</option>
+            </optgroup>
+
+            <optgroup label="Unidad IV">
+              <option value="Semana 13">Semana 13</option>
+              <option value="Semana 14">Semana 14</option>
+              <option value="Semana 15">Semana 15</option>
+              <option value="Semana 16">Semana 16</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- TABLA DE ENTREGAS -->
+        <div class="dash-table-wrapper">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>SEMANA</th>
+                <th>ARCHIVO / ENLACE</th>
+                <th style="text-align: center; width: 80px;">ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody id="dashTablaBody">
+              <!-- Se renderiza dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  <!-- CONTENEDOR FLOTANTE DEL CHATBOT R2-D2 -->
+  <div class="bot-wrapper">
+    
+    <!-- GLOBITO / TOOLTIP FLOTANTE -->
+    <div class="bot-tooltip" onclick="toggleChatbot()">
+      <span>🤖 ¡Hola! ¿Necesitas ayuda?</span>
+    </div>
+
+    <!-- AVATAR CIRCULAR FLOTANTE DE R2-D2 -->
+    <button class="bot-avatar-btn" onclick="toggleChatbot()" title="Abrir Asistente R2-D2">
+      <img src="https://i.ibb.co/nsDjnqcJ/r2-d2.webp" alt="R2-D2 Bot" class="r2d2-img">
+    </button>
+
+    <!-- VENTANA DEL CHAT -->
+    <div class="bot-chat-window" id="botChatWindow">
+      <!-- ENCABEZADO -->
+      <div class="bot-header">
+        <div class="bot-header-info">
+          <span class="bot-status-dot"></span>
+          <div>
+            <h4>R2-D2 Assistant</h4>
+            <small>En línea | Base de Datos II</small>
+          </div>
+        </div>
+        <button class="bot-close-btn" onclick="toggleChatbot()">&times;</button>
+      </div>
+
+      <!-- CUERPO DE MENSAJES -->
+      <div class="bot-body" id="botMessages">
+        <div class="bot-msg msg-bot">
+          Beep-boop! 🤖 Soy tu asistente de Base de Datos II. ¿Qué deseas explorar hoy?
+        </div>
+
+        <!-- OPCIONES RÁPIDAS -->
+        <div class="bot-pills-grid">
+          <button onclick="botSelectOption('resumen')">📋 Resumen</button>
+          <button onclick="botSelectOption('conceptos')">🗂️ Conceptos</button>
+          <button onclick="botSelectOption('sql')">&lt;/&gt; SQL</button>
+        </div>
+
+        <p class="bot-subtext">O selecciona una unidad de aprendizaje:</p>
+
+        <!-- BOTONES DE UNIDADES -->
+        <div class="bot-units-list">
+          <button class="bot-unit-btn" onclick="botSelectUnit(1)">
+            <strong>Unidad 1</strong>
+            <small>Arquitecturas de BD</small>
+          </button>
+          <button class="bot-unit-btn" onclick="botSelectUnit(2)">
+            <strong>Unidad 2</strong>
+            <small>Consultas Avanzadas</small>
+          </button>
+          <button class="bot-unit-btn" onclick="botSelectUnit(3)">
+            <strong>Unidad 3</strong>
+            <small>Optimización</small>
+          </button>
+          <button class="bot-unit-btn" onclick="botSelectUnit(4)">
+            <strong>Unidad 4</strong>
+            <small>Administración</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- PIE DE CHAT / ENTRADA DE TEXTO -->
+      <div class="bot-footer">
+        <input type="text" id="botInput" placeholder="Escribe tu consulta..." onkeypress="handleBotKey(event)" autocomplete="off">
+        <button onclick="sendBotUserMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
