@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -133,7 +132,7 @@
         <div class="cube-front">
           <div class="unit-info">
             <h3>UNIDAD 1</h3>
-            <p>Introducción a los Sistemas Informáticos</p>
+            <p>Arquitecturas de Bases de Datos y Configuración del Entorno Corporativo</p>
           </div>
           <button class="flip-btn" onclick="toggleFlip('unit1')">&#10095;</button>
         </div>
@@ -144,31 +143,39 @@
             <button class="flip-btn-back" onclick="toggleFlip('unit1')">✕</button>
           </div>
           <div class="week-grid-2x2">
-            <!-- Ejemplo en una tarjeta de semana -->
-          <div class="week-card" onclick="openWeekModal('Semana 1')">
-            <span class="week-badge">Semana 1</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <!-- TARJETA SEMANA 1 CON NOMBRE -->
+            <div class="week-card" onclick="openWeekModal('Semana 1')">
+              <span class="week-badge">Semana 1</span>
+              <h3 class="titulo-semana">Formulación del Proyecto y Selección de la Arquitectura</h3>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 2')">
-            <span class="week-badge">Semana 2</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+
+            <!-- TARJETA SEMANA 2 CON NOMBRE -->
+            <div class="week-card" onclick="openWeekModal('Semana 2')">
+              <span class="week-badge">Semana 2</span>
+              <h3 class="titulo-semana">Despliegue y Configuración de Motores de Datos (DBMS)</h3>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 3')">
-            <span class="week-badge">Semana 3</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+
+            <!-- SEMANA 3 -->
+            <div class="week-card" onclick="openWeekModal('Semana 3')">
+              <span class="week-badge">Semana 3</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 4')">
-            <span class="week-badge">Semana 4</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+
+            <!-- SEMANA 4 -->
+            <div class="week-card" onclick="openWeekModal('Semana 4')">
+              <span class="week-badge">Semana 4</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -190,30 +197,30 @@
             <button class="flip-btn-back" onclick="toggleFlip('unit2')">✕</button>
           </div>
           <div class="week-grid-2x2">
-                      <div class="week-card" onclick="openWeekModal('Semana 5')">
-            <span class="week-badge">Semana 5</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 5')">
+              <span class="week-badge">Semana 5</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 6')">
-            <span class="week-badge">Semana 6</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 6')">
+              <span class="week-badge">Semana 6</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 7')">
-            <span class="week-badge">Semana 7</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 7')">
+              <span class="week-badge">Semana 7</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 8')">
-            <span class="week-badge">Semana 8</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 8')">
+              <span class="week-badge">Semana 8</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -235,30 +242,30 @@
             <button class="flip-btn-back" onclick="toggleFlip('unit3')">✕</button>
           </div>
           <div class="week-grid-2x2">
-                      <div class="week-card" onclick="openWeekModal('Semana 9')">
-            <span class="week-badge">Semana 9</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 9')">
+              <span class="week-badge">Semana 9</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 10')">
-            <span class="week-badge">Semana 10</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 10')">
+              <span class="week-badge">Semana 10</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 11')">
-            <span class="week-badge">Semana 11</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 11')">
+              <span class="week-badge">Semana 11</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 12')">
-            <span class="week-badge">Semana 12</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 12')">
+              <span class="week-badge">Semana 12</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -280,30 +287,30 @@
             <button class="flip-btn-back" onclick="toggleFlip('unit4')">✕</button>
           </div>
           <div class="week-grid-2x2">
-                      <div class="week-card" onclick="openWeekModal('Semana 13')">
-            <span class="week-badge">Semana 13</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 13')">
+              <span class="week-badge">Semana 13</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 14')">
-            <span class="week-badge">Semana 14</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 14')">
+              <span class="week-badge">Semana 14</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 15')">
-            <span class="week-badge">Semana 15</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 15')">
+              <span class="week-badge">Semana 15</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
-                      <div class="week-card" onclick="openWeekModal('Semana 16')">
-            <span class="week-badge">Semana 16</span>
-            <div class="week-arrow-btn">
-              <i class="fa-solid fa-chevron-right"></i>
+            <div class="week-card" onclick="openWeekModal('Semana 16')">
+              <span class="week-badge">Semana 16</span>
+              <div class="week-arrow-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -329,35 +336,196 @@
   </div>
 </div>
 
+  <!-- MODAL DE INICIO DE SESIÓN CON CÓDIGO MAYÚSCULA, OJITO Y SIN AUTOCOMPLETADO -->
   <div id="loginModal" class="modal-overlay">
-    <div class="login-card-centered">
-      <div class="modal-header">
-        <h3>ACCESO ESTUDIANTIL</h3>
-        <button class="close-btn" onclick="closeLoginModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="text" placeholder="Código de Estudiante" class="pixel-input">
-        <input type="password" placeholder="Contraseña" class="pixel-input">
-        <button class="btn btn-submit">INGRESAR</button>
-        <button class="btn btn-back" onclick="closeLoginModal()">Volver al Frente ↺</button>
-      </div>
+  <div class="login-card-centered">
+    <div class="modal-header">
+      <h3>ACCESO ADMINISTRADOR</h3>
+      <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="adminLoginForm" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px;">
+        
+        <!-- CÓDIGO CON MAYÚSCULA AUTOMÁTICA -->
+        <div class="input-group" style="width: 100%;">
+          <input 
+            type="text" 
+            id="studentCode" 
+            placeholder="Código de Estudiante" 
+            class="pixel-input"
+            autocomplete="off" 
+            oninput="this.value = this.value.toUpperCase();" 
+            style="width: 100%; text-transform: uppercase;"
+          >
+        </div>
+
+        <!-- CONTRASEÑA CON BOTÓN DE OJITO Y SIN AUTOCOMPLETADO -->
+        <div class="input-group" style="position: relative; width: 100%;">
+          <input 
+            type="password" 
+            id="studentPass" 
+            placeholder="Contraseña" 
+            class="pixel-input"
+            autocomplete="new-password" 
+            readonly 
+            onfocus="this.removeAttribute('readonly');" 
+            style="width: 100%; padding-right: 45px;"
+          >
+          <button 
+            type="button" 
+            id="togglePassBtn" 
+            onclick="togglePasswordVisibility()" 
+            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--primary-color); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center;"
+            title="Mostrar / Ocultar Contraseña"
+          >
+            👁️
+          </button>
+        </div>
+
+        <button class="btn btn-submit" type="button" onclick="validarLogin()">INGRESAR</button>
+        <button class="btn btn-back" type="button" onclick="closeLoginModal()">Volver al Frente ↺</button>
+        
+        <p id="loginError" style="color: #ff0055; font-size: 0.8rem; margin-top: 5px; display: none;">
+          Código o contraseña incorrectos.
+        </p>
+      </form>
     </div>
   </div>
+</div>
 
   <script src="script.js"></script>
 
-  <!-- FOOTER PIE DE PÁGINA -->
-<footer class="footer-bar">
-  <div class="footer-content">
-    <i class="fa-solid fa-graduation-cap footer-icon"></i>
-    <span>Universidad Peruana Los Andes - Base de Datos II</span>
-  </div>
-</footer>
-<div class="cursor-glow" id="cursorGlow"></div>
+ <!-- FOOTER PIE DE PÁGINA -->
+  <footer class="footer-bar">
+    <div class="footer-content">
+      <i class="fa-solid fa-graduation-cap footer-icon"></i>
+      <span>Universidad Peruana Los Andes - Base de Datos II</span>
+    </div>
+  </footer>
 
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <script src="script.js"></script>
+  <!-- CONTENEDOR PRINCIPAL DEL DASHBOARD -->
+<div id="dashboardView" style="display: none; width: 100%; min-height: 100vh; position: relative; z-index: 10;">
+  
+  <!-- ENCABEZADO TIPO PANEL DE ADMINISTRACIÓN -->
+  <header class="header dashboard-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; width: 100%;">
+  
+  <!-- LOGO UPLA AJUSTADO AL RECUADRO -->
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <div class="dash-logo-box" style="width: 45px; height: 45px; padding: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--primary-color); border-radius: 8px; box-sizing: border-box; background: rgba(0,0,0,0.3);">
+      <img src="https://i.ibb.co/5gyh1RwF/logo-arriba.png" alt="UPLA Logo" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+    </div>
+    <div>
+      <div class="logo" style="margin: 0; font-size: 1.1rem; text-transform: uppercase;">PANEL DE ADMINISTRACIÓN</div>
+      <span class="subtitle" style="font-size: 0.75rem;">Sistemas & Base de Datos</span>
+    </div>
+  </div>
 
+  <!-- CONTROLES DERECHOS -->
+  <div class="header-controls" style="display: flex; align-items: center; gap: 12px;">
+    <div class="user-badge">
+      <span style="font-size: 0.9rem;">👤</span>
+      <span id="userDisplayCode">juanleninhuaman@gmail.com</span>
+    </div>
+
+    <span class="role-tag">ADMINISTRADOR</span>
+
+    <!-- ESPADA DE LUZ CON EVENTO DIRECTO -->
+    <div id="glow-toggle-dash" class="lightsaber-vertical" onclick="toggleRedTheme()" title="Cambiar tema de color" style="cursor: pointer; position: relative; z-index: 99; display: inline-block;">
+      <div class="saber-blade-v" style="pointer-events: none;"></div>
+      <div class="saber-hilt-v" style="pointer-events: none;"></div>
+    </div>
+
+    <!-- BOTÓN SALIR -->
+    <button class="btn btn-logout" type="button" onclick="irAlPortal()" title="Volver al Portafolio" style="padding: 8px 16px; font-weight: bold; cursor: pointer;">
+      Salir
+    </button>
+  </div>
+</header>
+
+  <!-- CONTENIDO PRINCIPAL (DEBAJO DEL HEADER) -->
+  <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px; width: 100%;">
+    <h1 class="section-title" style="text-align: left; font-size: 1.8rem; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+      📈 Dashboard
+    </h1>
+    
+    <div class="skills-grid" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;">
+      <div class="skill-card" style="display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid var(--primary-color); border-radius: 8px;">
+        <span class="skill-icon" style="font-size: 1.5rem;">📊</span>
+        <div>
+          <h4 style="margin: 0; color: var(--primary-color);">Estatus Académico</h4>
+          <p style="margin: 3px 0 0 0; font-size: 0.85rem; opacity: 0.8;">Sistemas - Activo</p>
+        </div>
+      </div>
+
+      <div class="skill-card" style="display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid var(--primary-color); border-radius: 8px;">
+        <span class="skill-icon" style="font-size: 1.5rem;">💾</span>
+        <div>
+          <h4 style="margin: 0; color: var(--primary-color);">Base de Datos</h4>
+          <p style="margin: 3px 0 0 0; font-size: 0.85rem; opacity: 0.8;">Conexión Establecida</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+<!-- CHATBOT FLOTANTE ARTUERITO -->
+<div class="bot-wrapper">
+  <!-- Globito flotante previa -->
+  <div class="bot-tooltip" onclick="toggleChatbot()">
+    <span>🤖 ¿Tienes dudas de Base de Datos?</span>
+  </div>
+
+  <!-- Botón flotante del avatar R2-D2 -->
+ <div class="bot-avatar-btn" onclick="toggleChatbot()">
+  <img src="https://i.ibb.co/nsDjnqcJ/r2-d2.webp" alt="R2-D2 Bot" class="r2d2-img">
+</div>
+
+  <!-- Ventana desplegable del chat -->
+  <div id="botChatWindow" class="bot-chat-window">
+    <div class="bot-header">
+      <div class="bot-header-info">
+        <div class="bot-status-dot"></div>
+        <div>
+          <h4>DataBot R2</h4>
+          <small>Asistente de Base de Datos II</small>
+        </div>
+      </div>
+      <button class="bot-close-btn" onclick="toggleChatbot()">✕</button>
+    </div>
+
+    <div class="bot-body" id="botMessages">
+      <div class="bot-msg msg-bot">
+        ¡Hola! Soy DataBot R2 🤖. Selecciona una opción o unidad para explorar tus materiales:
+      </div>
+
+      <!-- Quick Buttons Top -->
+      <div class="bot-pills-grid">
+        <button onclick="botSelectOption('conceptos')">🗂️ Conceptos</button>
+        <button onclick="botSelectOption('sql')">&lt;/&gt; SQL</button>
+        <button onclick="botSelectOption('resumen')">📋 Resumen</button>
+      </div>
+
+      <div class="bot-subtext">🧭 Selecciona una unidad:</div>
+
+      <div class="bot-units-list">
+        <button class="bot-unit-btn" onclick="botSelectUnit(1)">
+          <strong>🗄️ Unidad 1: Arquitecturas de Bases de Datos y Configuración del Entorno Corporativo</strong>
+          <small>Semanas 1 a 4</small>
+        </button>
+        <button class="bot-unit-btn" onclick="botSelectUnit(2)">
+          <strong>🔗 Unidad 2: Consultas Avanzadas</strong>
+          <small>Semanas 5 a 8</small>
+        </button>
+      </div>
+    </div>
+
+    <div class="bot-footer">
+      <input type="text" id="botInput" placeholder="Escribe tu consulta..." onkeypress="handleBotKey(event)">
+      <button onclick="sendBotUserMsg()">✈️</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
