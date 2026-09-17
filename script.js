@@ -24,9 +24,38 @@ function triggerHyperspaceLogin() {
   }
 }
 
+// FUNCIÓN CORREGIDA: Cierra el modal y restablece el campo de contraseña
 function closeLoginModal() {
   const loginModal = document.getElementById('loginModal');
   if (loginModal) loginModal.style.display = 'none';
+
+  // Oculta la contraseña y resetea el ojito al cerrar
+  const passInput = document.getElementById('studentPass');
+  const toggleBtn = document.getElementById('togglePassBtn');
+
+  if (passInput) passInput.type = 'password';
+  if (toggleBtn) {
+    toggleBtn.textContent = '👁️';
+    toggleBtn.setAttribute('title', 'Mostrar contraseña');
+  }
+}
+
+// NUEVA FUNCIÓN: Ejecuta la rotación de pantalla completa y limpia la vista
+function handleLoginSuccess() {
+  closeLoginModal();
+
+  // Aplica la animación CSS de giro a la derecha sobre todo el sitio
+  document.body.classList.add('screen-flip-right');
+
+  // Espera 1.2 segundos (duración de la vuelta) y vacía el contenedor
+  setTimeout(() => {
+    document.body.innerHTML = `
+      <div id="empty-dashboard" style="min-height: 100vh; background: #0a0a12; color: #fff; display: flex; align-items: center; justify-content: center;">
+        <!-- Pantalla vacía lista para el nuevo contenido -->
+      </div>
+    `;
+    document.body.classList.remove('screen-flip-right');
+  }, 1200);
 }
 
 // ==========================================
@@ -206,3 +235,289 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ==========================================
+// 7. CONTROL DE SESIÓN Y VISTAS (LOGIN Y DASHBOARD)
+// ==========================================
+function validarLogin() {
+  const codeInput = document.getElementById('studentCode');
+  const passInput = document.getElementById('studentPass');
+  const errorMsg = document.getElementById('loginError');
+
+  if (!codeInput || !passInput) return;
+
+  const code = codeInput.value.trim();
+  const pass = passInput.value.trim();
+
+  // Verificación de credenciales
+  if (code === 'T00047H' && pass === 'sistemas') {
+    if (errorMsg) errorMsg.style.display = 'none';
+
+    // 1. Ocultar el modal de login
+    closeLoginModal();
+
+    // 2. Ocultar todas las secciones del Portafolio (Landing Page)
+    document.querySelectorAll('header, section, footer').forEach(el => {
+      if (el.parentElement.id !== 'dashboardView') {
+        el.style.display = 'none';
+      }
+    });
+
+    // 3. Mostrar el Dashboard de Administración
+    const dashboardView = document.getElementById('dashboardView');
+    if (dashboardView) {
+      dashboardView.style.display = 'block';
+    }
+  } else {
+    // Muestra mensaje de error en el modal
+    if (errorMsg) {
+      errorMsg.style.display = 'block';
+    } else {
+      alert('Código o contraseña incorrectos.');
+    }
+  }
+}
+
+function cerrarSesion() {
+  // 1. Ocultar Dashboard
+  const dashboardView = document.getElementById('dashboardView');
+  if (dashboardView) dashboardView.style.display = 'none';
+
+  // 2. Mostrar nuevamente todas las secciones de la Landing Page
+  document.querySelectorAll('header, section, footer').forEach(el => {
+    if (el.parentElement.id !== 'dashboardView') {
+      el.style.display = '';
+    }
+  });
+
+  // 3. Reabrir modal de Login
+  const loginModal = document.getElementById('loginModal');
+  if (loginModal) {
+    loginModal.style.display = 'flex';
+  }
+}
+
+function irAlPortal() {
+  // Oculta Dashboard y regresa a la página inicial
+  const dashboardView = document.getElementById('dashboardView');
+  if (dashboardView) dashboardView.style.display = 'none';
+
+  document.querySelectorAll('header, section, footer').forEach(el => {
+    if (el.parentElement.id !== 'dashboardView') {
+      el.style.display = '';
+    }
+  });
+}
+
+// ==========================================
+// 8. CAMBIO DE TEMA Y PERSISTENCIA (AZUL / ROJO)
+// ==========================================
+function toggleRedTheme() {
+  document.body.classList.toggle('red-theme');
+  
+  const isRed = document.body.classList.contains('red-theme');
+  localStorage.setItem('theme', isRed ? 'red' : 'blue');
+}
+
+// Carga el tema guardado al abrir o recargar la página
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('theme') === 'red') {
+    document.body.classList.add('red-theme');
+  }
+  
+  // Asegurar la escucha para la espada del Dashboard
+  const saberDash = document.getElementById('glow-toggle-dash');
+  if (saberDash) {
+    saberDash.addEventListener('click', toggleRedTheme);
+  }
+});
+
+// ==========================================
+// 9. ALTERNAR VISIBILIDAD DE CONTRASEÑA (OJITO)
+// ==========================================
+function togglePasswordVisibility() {
+  const passInput = document.getElementById('studentPass');
+  const toggleBtn = document.getElementById('togglePassBtn');
+
+  if (!passInput || !toggleBtn) return;
+
+  // Si es tipo password, lo cambia a text (muestra texto)
+  if (passInput.type === 'password') {
+    passInput.type = 'text';
+    toggleBtn.textContent = '🙈'; // Cambia icono al presionar
+    toggleBtn.setAttribute('title', 'Ocultar contraseña');
+  } else {
+    // Si es tipo text, vuelve a password (oculta texto con asteriscos)
+    passInput.type = 'password';
+    toggleBtn.textContent = '👁️';
+    toggleBtn.setAttribute('title', 'Mostrar contraseña');
+  }
+}
+
+// Limpiar inputs
+// Agrega o asegúrate de tener esta función auxiliar para vaciar las cajas
+function resetLoginForm() {
+  const codeInput = document.getElementById('studentCode');
+  const passInput = document.getElementById('studentPass');
+  const errorMsg = document.getElementById('loginError');
+
+  if (codeInput) codeInput.value = '';
+  if (passInput) {
+    passInput.value = '';
+    passInput.type = 'password';
+  }
+  if (errorMsg) errorMsg.style.display = 'none';
+
+  const toggleBtn = document.getElementById('togglePassBtn');
+  if (toggleBtn) {
+    toggleBtn.textContent = '👁️';
+    toggleBtn.setAttribute('title', 'Mostrar contraseña');
+  }
+}
+
+// Actualiza closeLoginModal para que limpie los campos
+function closeLoginModal() {
+  const loginModal = document.getElementById('loginModal');
+  if (loginModal) loginModal.style.display = 'none';
+
+  resetLoginForm(); // Limpia campos al cerrar
+}
+
+// Actualiza validarLogin para limpiar los campos si el acceso es correcto
+function validarLogin() {
+  const codeInput = document.getElementById('studentCode');
+  const passInput = document.getElementById('studentPass');
+  const errorMsg = document.getElementById('loginError');
+
+  if (!codeInput || !passInput) return;
+
+  const code = codeInput.value.trim();
+  const pass = passInput.value.trim();
+
+  if (code === 'T00047H' && pass === 'sistemas') {
+    if (errorMsg) errorMsg.style.display = 'none';
+
+    // 1. Limpiar inputs antes de ocultar
+    resetLoginForm();
+
+    // 2. Ocultar el modal de login
+    closeLoginModal();
+
+    // 3. Ocultar el resto del portafolio y mostrar Dashboard
+    document.querySelectorAll('header, section, footer').forEach(el => {
+      if (el.parentElement.id !== 'dashboardView') {
+        el.style.display = 'none';
+      }
+    });
+
+    const dashboardView = document.getElementById('dashboardView');
+    if (dashboardView) {
+      dashboardView.style.display = 'block';
+    }
+  } else {
+    if (errorMsg) {
+      errorMsg.style.display = 'block';
+    } else {
+      alert('Código o contraseña incorrectos.');
+    }
+  }
+}
+
+// Actualiza irAlPortal para limpiar el formulario cuando presionas Salir
+function irAlPortal() {
+  const dashboardView = document.getElementById('dashboardView');
+  if (dashboardView) dashboardView.style.display = 'none';
+
+  document.querySelectorAll('header, section, footer').forEach(el => {
+    if (el.parentElement.id !== 'dashboardView') {
+      el.style.display = '';
+    }
+  });
+
+  resetLoginForm(); // Garantiza que si reabres la ventana esté vacía
+}
+// ==========================================
+// CHATBOT FLOTANTE ARTUERITO (DATABOT R2)
+// ==========================================
+function toggleChatbot() {
+  const win = document.getElementById('botChatWindow');
+  if (win) {
+    win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+  }
+}
+
+function appendBotMessage(text, isUser = false) {
+  const box = document.getElementById('botMessages');
+  if (!box) return;
+
+  const msg = document.createElement('div');
+  msg.className = `bot-msg ${isUser ? 'msg-user' : 'msg-bot'}`;
+  msg.innerHTML = text;
+  box.appendChild(msg);
+  box.scrollTop = box.scrollHeight;
+}
+
+function botSelectOption(tipo) {
+  if (tipo === 'conceptos') {
+    appendBotMessage('🗂️ Conceptos: Los DBMS (Sistemas Gestores) administran almacenamiento, seguridad e integridad de datos.');
+  } else if (tipo === 'sql') {
+    appendBotMessage('&lt;/&gt; SQL: Lenguaje de consulta estructurado para definir (DDL) y manipular (DML) datos.');
+  } else if (tipo === 'resumen') {
+    appendBotMessage('📋 Resumen actual: Estás en la Unidad 1 (Arquitectura de Base de Datos) - Semanas 1 y 2.');
+  }
+}
+
+function botSelectUnit(num) {
+  appendBotMessage(`<b>Unidad ${num} seleccionada</b>`, true);
+
+  if (num === 1) {
+    appendBotMessage(`
+      ✅ Abriendo Unidad 1:<br>
+      Selecciona una semana:
+      <div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap;">
+        <button onclick="botShowWeek(1)" style="padding:3px 8px; border-radius:6px; border:1px solid #00f2fe; background:transparent; color:#00f2fe; cursor:pointer;">Semana 1</button>
+        <button onclick="botShowWeek(2)" style="padding:3px 8px; border-radius:6px; border:1px solid #00f2fe; background:transparent; color:#00f2fe; cursor:pointer;">Semana 2</button>
+      </div>
+    `);
+  } else {
+    appendBotMessage(`⚠️ Las semanas de la Unidad ${num} se habilitarán en las siguientes sesiones.`);
+  }
+}
+
+function botShowWeek(numSemana) {
+  const infoSemana = semanasInfo[`Semana ${numSemana}`];
+  if (infoSemana && infoSemana.actividades) {
+    let respuesta = `📄 <b>Archivos de la Semana ${numSemana}:</b><br>`;
+    infoSemana.actividades.forEach(act => {
+      respuesta += `• <a href="${act.pdfRuta}" target="_blank" style="color:#00f2fe;">${act.pdfTitulo}</a><br>`;
+    });
+    appendBotMessage(respuesta);
+  } else {
+    appendBotMessage(`No hay archivos registrados para la Semana ${numSemana}.`);
+  }
+}
+
+function sendBotUserMsg() {
+  const input = document.getElementById('botInput');
+  if (!input) return;
+  const txt = input.value.trim();
+  if (!txt) return;
+
+  appendBotMessage(txt, true);
+  input.value = '';
+
+  setTimeout(() => {
+    const query = txt.toLowerCase();
+    if (query.includes('hola') || query.includes('buenas')) {
+      appendBotMessage('¡Hola! Beep-boop 🤖 ¿En qué te puedo colaborar hoy?');
+    } else if (query.includes('pdf') || query.includes('tarea') || query.includes('semana')) {
+      appendBotMessage('Puedes revisar el material de las Semanas 1 y 2 seleccionando la Unidad 1 arriba.');
+    } else {
+      appendBotMessage('Procesando consulta... Te sugiero explorar las opciones de la Unidad 1.');
+    }
+  }, 600);
+}
+
+function handleBotKey(e) {
+  if (e.key === 'Enter') sendBotUserMsg();
+}
