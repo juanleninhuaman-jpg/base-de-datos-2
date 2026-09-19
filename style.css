@@ -155,12 +155,19 @@
     background: #ffffff;
     border-radius: 4px;
     box-shadow: 0 0 4px #fff, 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+    transition: box-shadow 0.3s ease;
   }
   
   .saber-hilt-v {
     width: 12px;
     height: 25px;
     background: linear-gradient(180deg, #888, #222);
+  }
+
+  /* ESTILO ESPADA LÁSER EN MODO ROJO (SITH) */
+  body.glow-red .saber-blade-v {
+    background: #ffffff !important;
+    box-shadow: 0 0 4px #fff, 0 0 10px #ff003c, 0 0 20px #ff003c !important;
   }
   
   /* --- ESTRUCTURA DEL CUBO/PRISMA HOLOGRAMA 3D --- */
@@ -947,7 +954,7 @@
     height: 42px;
     border-radius: 50%;
     box-shadow: 0 0 12px var(--primary-color);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1395,3 +1402,158 @@
     box-shadow: 0 0 12px #ff003c;
     transform: scale(1.08);
   }
+  /* Contenedor o imagen del bot */
+/* Quitar fondo blanco del contenedor circular */
+.bot-trigger-btn,
+.r2d2-btn,
+#botToggle,
+.bot-avatar-container {
+  background: transparent !important;
+  background-color: transparent !important;
+  width: 90px !important;  /* Tamaño más grande */
+  height: 90px !important;
+}
+
+/* Forzar transparencia y ajuste en la imagen interna */
+.bot-trigger-btn img,
+.r2d2-btn img,
+#botToggle img,
+.bot-avatar-container img {
+  background: transparent !important;
+  background-color: transparent !important;
+  mix-blend-mode: multiply; /* Oculta automáticamente los fondos blancos claros */
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+/* Quitar el fondo blanco del círculo del bot */
+.bot-launcher,
+.bot-trigger-btn,
+.r2d2-btn,
+#botToggle,
+button[onclick*="toggleChatbot"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Ajustar el tamaño del contenedor del bot */
+.bot-launcher,
+.bot-trigger-btn,
+.r2d2-btn,
+#botToggle {
+  width: 90px !important;
+  height: 90px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Agrandar la imagen y mantener el borde neón */
+.bot-launcher img,
+.bot-trigger-btn img,
+.r2d2-btn img,
+#botToggle img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  filter: drop-shadow(0 0 8px #00f2fe); /* Efecto neón neón en los bordes de la imagen */
+}
+/* ==========================================
+   CAMBIO DE COLOR DEL BOT EN MODO ROJO
+   ========================================== */
+
+/* 1. Cambio del borde neón alrededor del R2-D2 */
+body.red-theme .bot-launcher,
+body.red-theme .bot-trigger-btn,
+body.red-theme .r2d2-btn,
+body.red-theme #botToggle,
+body.red-theme .bot-avatar-container {
+  border-color: #ff0055 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.8) !important;
+}
+
+/* 2. Sombra e iluminación interna de la imagen */
+body.red-theme .bot-launcher img,
+body.red-theme .bot-trigger-btn img,
+body.red-theme .r2d2-btn img,
+body.red-theme #botToggle img {
+  filter: drop-shadow(0 0 8px #ff0055) !important;
+}
+
+/* 3. Borde del globo del mensaje "¿Necesitas ayuda?" */
+body.red-theme .bot-tooltip,
+body.red-theme .bot-welcome-bubble,
+body.red-theme [class*="help-bubble"] {
+  border-color: #ff0055 !important;
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.5) !important;
+}
+/* FORZAR CAMBIO DE COLOR EN EL ARO DEL BOT */
+body.red-theme #botToggle,
+body.red-theme .bot-launcher,
+body.red-theme .bot-trigger-btn,
+body.red-theme button[onclick*="toggleChatbot"] {
+  border: 2px solid #ff0055 !important;
+  border-color: #ff0055 !important;
+  box-shadow: 0 0 12px #ff0055, inset 0 0 8px #ff0055 !important;
+}
+
+/* EFECTO ROJO EN LA IMAGEN Y EN FOCO */
+body.red-theme #botToggle img,
+body.red-theme .bot-launcher img,
+body.red-theme .bot-trigger-btn img {
+  filter: drop-shadow(0 0 6px #ff0055) !important;
+}
+/* AGRANDAR EL BOT CON TRANSFORM SCALE */
+.bot-launcher,
+.bot-trigger-btn,
+.r2d2-btn,
+#botToggle,
+button[onclick*="toggleChatbot"] {
+  transform: scale(1.4) !important; /* Aumenta un 40% el tamaño completo del bot */
+  transform-origin: bottom right !important; /* Mantiene la posición fija en la esquina inferior derecha */
+}
+
+/* Forzar el tamaño de la imagen interna */
+.bot-launcher img,
+.bot-trigger-btn img,
+.r2d2-btn img,
+#botToggle img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+/* ALINEAR BURBUJA Y CENTRAR IMAGEN DEL BOT */
+
+/* 1. Mover la burbuja hacia la izquierda para que no se choque */
+.bot-tooltip,
+.bot-welcome-bubble,
+[class*="help-bubble"],
+#botChatWindow {
+  margin-bottom: 20px !important;
+  margin-right: 15px !important;
+}
+
+/* 2. Centrar perfectamente a R2-D2 dentro del aro */
+.bot-launcher,
+.bot-trigger-btn,
+.r2d2-btn,
+#botToggle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important; /* Evita que la imagen sobresalga del círculo */
+}
+
+.bot-launcher img,
+.bot-trigger-btn img,
+.r2d2-btn img,
+#botToggle img {
+  width: 85% !important;  /* Ajusta el tamaño dentro del aro */
+  height: 85% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: auto !important;
+}
