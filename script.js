@@ -68,7 +68,6 @@ const semanasInfoPredeterminadas = {
       }
     ]
   }
-
 };
 
 // Carga datos guardados o establece los predeterminados
