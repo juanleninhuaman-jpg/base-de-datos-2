@@ -45,6 +45,29 @@ const semanasInfoPredeterminadas = {
       }
     ]
   },
+  'Semana 3': {
+    tituloSemana: 'Modelamiento Fisico y Mecanismo de Integracion',
+    actividades: [
+      {
+        actividad: 'ACTIVIDAD 01',
+        pdfTitulo: 'Modelado Grados y Títulos',
+        pdfRuta: 'https://drive.google.com/file/d/1ixM3PPgXK9feaUABpBB5dNy-jlMq8FqM/view?usp=sharing"',
+        tipo: 'archivo'
+      },
+      {
+        actividad: 'ACTIVIDAD 02',
+        pdfTitulo: "Modelado Informático y Editorial",
+        pdfRuta: "https://drive.google.com/file/d/14KDGbasof50GCrwo6mq7eUgK0UJdfZYE/view?usp=sharing",
+        tipo: 'archivo'
+      },
+      {
+        actividad: 'ACTIVIDAD 03',
+        pdfTitulo: 'Modelamiento Físico y Mecanismos de Integración',
+        pdfRuta: 'https://drive.google.com/file/d/1punNbWJKNX3z-cCZXepUaRtSYN6Bn9Ew/view?usp=sharing"',
+        tipo: 'archivo'
+      }
+    ]
+  }
 
 };
 
