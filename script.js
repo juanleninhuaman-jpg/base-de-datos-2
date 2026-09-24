@@ -690,7 +690,7 @@ async function guardarCambiosNombreDashboard() {
   }
 }
 
-// Exponer funciones globales al objeto window para ser llamadas desde el HTML
+// Exponer funciones globales al objeto window para ser llamadas desde los eventos onclick de HTML
 window.triggerHyperspaceLogin = triggerHyperspaceLogin;
 window.closeLoginModal = closeLoginModal;
 window.validarLogin = validarLogin;
