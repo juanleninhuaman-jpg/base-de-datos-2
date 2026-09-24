@@ -1,5 +1,26 @@
 // ==========================================
-// 1. ESTRUCTURA DE DATOS BASE Y PERSISTENCIA (LOCALSTORAGE)
+// 0. CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
+// ==========================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDUBxcOogw_4kl907r8YCPGXGYBVi-7Gas",
+  authDomain: "base-de-datos-2-8f3af.firebaseapp.com",
+  projectId: "base-de-datos-2-8f3af",
+  storageBucket: "base-de-datos-2-8f3af.firebasestorage.app",
+  messagingSenderId: "170356526532",
+  appId: "1:170356526532:web:6cb0b3283a239ba0e46891",
+  measurementId: "G-WT433CHSMF"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+// ==========================================
+// 1. ESTRUCTURA DE DATOS BASE Y NUBE/LOCALSTORAGE
 // ==========================================
 
 const semanasInfoPredeterminadas = {
@@ -51,7 +72,7 @@ const semanasInfoPredeterminadas = {
       {
         actividad: 'ACTIVIDAD 01',
         pdfTitulo: 'Modelado Grados y Títulos',
-        pdfRuta: 'https://drive.google.com/file/d/1ixM3PPgXK9feaUABpBB5dNy-jlMq8FqM/view?usp=sharing"',
+        pdfRuta: 'https://drive.google.com/file/d/1ixM3PPgXK9feaUABpBB5dNy-jlMq8FqM/view?usp=sharing',
         tipo: 'archivo'
       },
       {
@@ -63,25 +84,55 @@ const semanasInfoPredeterminadas = {
       {
         actividad: 'ACTIVIDAD 03',
         pdfTitulo: 'Modelamiento Físico y Mecanismos de Integración',
-        pdfRuta: 'https://drive.google.com/file/d/1punNbWJKNX3z-cCZXepUaRtSYN6Bn9Ew/view?usp=sharing"',
+        pdfRuta: 'https://drive.google.com/file/d/1punNbWJKNX3z-cCZXepUaRtSYN6Bn9Ew/view?usp=sharing',
         tipo: 'archivo'
       }
     ]
   }
 };
 
-// Carga datos guardados o establece los predeterminados
 let semanasInfo = JSON.parse(localStorage.getItem('portafolio_semanas')) || semanasInfoPredeterminadas;
 let unidadesInfo = JSON.parse(localStorage.getItem('portafolio_unidades')) || {};
 
-function guardarEnLocalStorage() {
+// Guardar tanto en LocalStorage como en Firebase Firestore
+async function guardarEnLocalStorage() {
   localStorage.setItem('portafolio_semanas', JSON.stringify(semanasInfo));
   localStorage.setItem('portafolio_unidades', JSON.stringify(unidadesInfo));
+
+  try {
+    await setDoc(doc(db, "portafolio", "datosGlobales"), {
+      semanasInfo: semanasInfo,
+      unidadesInfo: unidadesInfo
+    });
+  } catch (err) {
+    console.error("Error sincronizando con Firestore: ", err);
+  }
+}
+
+// Cargar desde Firestore si existe
+async function cargarDesdeFirestore() {
+  try {
+    const docRef = doc(db, "portafolio", "datosGlobales");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (data.semanasInfo) semanasInfo = data.semanasInfo;
+      if (data.unidadesInfo) unidadesInfo = data.unidadesInfo;
+
+      localStorage.setItem('portafolio_semanas', JSON.stringify(semanasInfo));
+      localStorage.setItem('portafolio_unidades', JSON.stringify(unidadesInfo));
+
+      aplicarCambiosGuardadosUI();
+      renderizarTablaDashboard();
+    }
+  } catch (err) {
+    console.error("Error cargando desde Firestore: ", err);
+  }
 }
 
 // Aplicar cambios guardados en la interfaz
 function aplicarCambiosGuardadosUI() {
-  // 1. Actualizar Unidades
   Object.keys(unidadesInfo).forEach(unitId => {
     const data = unidadesInfo[unitId];
     if (data.titulo) {
@@ -94,7 +145,6 @@ function aplicarCambiosGuardadosUI() {
     }
   });
 
-  // 2. Actualizar Títulos de las Semanas
   const weekCards = document.querySelectorAll('.week-card');
   weekCards.forEach(card => {
     const badge = card.querySelector('.week-badge');
@@ -117,15 +167,12 @@ function aplicarCambiosGuardadosUI() {
 // 2. MODO NEÓN Y SABLE DE LUZ
 // ==========================================
 function toggleRedTheme() {
-  // 1. Cambiar el tema del body
   document.body.classList.toggle('red-theme');
   document.body.classList.toggle('glow-red');
 
-  // 2. Encender/Apagar el estado de las espadas
   const isRed = document.body.classList.contains('red-theme');
   
-  // Buscar todas las espadas (tanto la del sitio como la del dashboard)
-  const lightsabers = document.querySelectorAll('#glow-toggle, .lightsaber-toggle');
+  const lightsabers = document.querySelectorAll('#glow-toggle, .lightsaber-toggle, #glow-toggle-dash');
   lightsabers.forEach(saber => {
     if (isRed) {
       saber.classList.add('active');
@@ -134,7 +181,6 @@ function toggleRedTheme() {
     }
   });
 
-  // 3. Guardar preferencia
   localStorage.setItem('theme', isRed ? 'red' : 'blue');
 }
 
@@ -383,7 +429,7 @@ function handleBotKey(e) {
 }
 
 // ==========================================
-// 6. SUBIDA Y GESTIÓN EN DASHBOARD CON PERSISTENCIA
+// 6. SUBIDA Y GESTIÓN EN DASHBOARD (FIREBASE STORAGE & FIRESTORE)
 // ==========================================
 let tipoSubidaActual = 'archivo';
 
@@ -444,7 +490,7 @@ function inicializarDragAndDrop() {
   }, false);
 }
 
-function subirTrabajoDashboard() {
+async function subirTrabajoDashboard() {
   const selectElem = document.getElementById('dashSelectUnidadSemana');
   if (!selectElem) return;
 
@@ -452,6 +498,8 @@ function subirTrabajoDashboard() {
   const desc = document.getElementById('dashInputDesc').value.trim();
   let tituloFinal = desc;
   let rutaFinal = '#';
+
+  const btnSubir = document.getElementById('btnSubirDashboard');
 
   if (tipoSubidaActual === 'archivo') {
     const fileInput = document.getElementById('dashFileInput');
@@ -464,11 +512,31 @@ function subirTrabajoDashboard() {
     const file = fileInput.files[0];
     if (!tituloFinal) tituloFinal = file.name;
 
-    // Crea un objeto de URL directo y seguro para el navegador
-    rutaFinal = URL.createObjectURL(file);
-    
-    // Procesa el guardado de forma directa sin bloquear la ejecución
-    guardarActividad(semana, tituloFinal, rutaFinal, 'archivo');
+    try {
+      if (btnSubir) {
+        btnSubir.disabled = true;
+        btnSubir.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Subiendo a Firebase...';
+      }
+
+      // 1. Subir archivo físico a Firebase Storage
+      const storageRef = ref(storage, `entregas/${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      
+      // 2. Obtener enlace web público
+      rutaFinal = await getDownloadURL(snapshot.ref);
+
+      await guardarActividad(semana, tituloFinal, rutaFinal, 'archivo');
+
+    } catch (err) {
+      console.error(err);
+      alert('Ocurrió un error al subir el archivo a Firebase.');
+    } finally {
+      if (btnSubir) {
+        btnSubir.disabled = false;
+        btnSubir.innerHTML = '<i class="fa-solid fa-arrow-up-from-bracket"></i> Subir Trabajo';
+      }
+    }
+
   } else {
     const urlInput = document.getElementById('dashInputUrl').value.trim();
     if (!urlInput) {
@@ -478,11 +546,11 @@ function subirTrabajoDashboard() {
     if (!tituloFinal) tituloFinal = 'Enlace de recurso registrado';
     rutaFinal = urlInput;
     
-    guardarActividad(semana, tituloFinal, rutaFinal, 'enlace');
+    await guardarActividad(semana, tituloFinal, rutaFinal, 'enlace');
   }
 }
 
-function guardarActividad(semana, titulo, ruta, tipo) {
+async function guardarActividad(semana, titulo, ruta, tipo) {
   if (!semanasInfo[semana]) semanasInfo[semana] = { actividades: [] };
   if (!semanasInfo[semana].actividades) semanasInfo[semana].actividades = [];
 
@@ -493,7 +561,7 @@ function guardarActividad(semana, titulo, ruta, tipo) {
     tipo: tipo
   });
 
-  guardarEnLocalStorage();
+  await guardarEnLocalStorage();
 
   // Limpiar campos
   document.getElementById('dashInputDesc').value = '';
@@ -503,7 +571,7 @@ function guardarActividad(semana, titulo, ruta, tipo) {
   const displayFile = document.getElementById('dashFileNameDisplay');
   if (displayFile) displayFile.textContent = '';
 
-  alert(`¡Trabajo subido con éxito a la ${semana}!`);
+  alert(`¡Trabajo subido con éxito a Firebase (${semana})!`);
   renderizarTablaDashboard();
 }
 
@@ -551,11 +619,11 @@ function renderizarTablaDashboard() {
   if (pendingDisplay) pendingDisplay.textContent = '0';
 }
 
-function eliminarTrabajoDashboard(semana, index) {
+async function eliminarTrabajoDashboard(semana, index) {
   if (confirm(`¿Estás seguro de eliminar este trabajo de la ${semana}?`)) {
     if (semanasInfo[semana] && semanasInfo[semana].actividades) {
       semanasInfo[semana].actividades.splice(index, 1);
-      guardarEnLocalStorage();
+      await guardarEnLocalStorage();
       renderizarTablaDashboard();
     }
   }
@@ -592,7 +660,7 @@ function cargarNombreEnInput() {
   }
 }
 
-function guardarCambiosNombreDashboard() {
+async function guardarCambiosNombreDashboard() {
   const selectVal = document.getElementById('dashEditSelect').value;
   const nuevoTitulo = document.getElementById('dashInputNuevoTitulo').value.trim();
   const nuevaDesc = document.getElementById('dashInputNuevaDesc').value.trim();
@@ -607,7 +675,7 @@ function guardarCambiosNombreDashboard() {
     const unitKey = `unit${unitNum}`;
 
     unidadesInfo[unitKey] = { titulo: nuevoTitulo, desc: nuevaDesc };
-    guardarEnLocalStorage();
+    await guardarEnLocalStorage();
     aplicarCambiosGuardadosUI();
 
     alert(`¡Unidad ${unitNum} actualizada con éxito!`);
@@ -615,30 +683,54 @@ function guardarCambiosNombreDashboard() {
     if (!semanasInfo[selectVal]) semanasInfo[selectVal] = { actividades: [] };
     semanasInfo[selectVal].tituloSemana = nuevoTitulo;
 
-    guardarEnLocalStorage();
+    await guardarEnLocalStorage();
     aplicarCambiosGuardadosUI();
 
     alert(`¡${selectVal} actualizada con éxito!`);
   }
 }
 
+// Exponer funciones globales al objeto window para ser llamadas desde el HTML
+window.triggerHyperspaceLogin = triggerHyperspaceLogin;
+window.closeLoginModal = closeLoginModal;
+window.validarLogin = validarLogin;
+window.irAlPortal = irAlPortal;
+window.togglePasswordVisibility = togglePasswordVisibility;
+window.toggleRedTheme = toggleRedTheme;
+window.toggleFlip = toggleFlip;
+window.openWeekModal = openWeekModal;
+window.closeWeekModal = closeWeekModal;
+window.toggleChatbot = toggleChatbot;
+window.botSelectOption = botSelectOption;
+window.botSelectUnit = botSelectUnit;
+window.botShowWeek = botShowWeek;
+window.sendBotUserMsg = sendBotUserMsg;
+window.handleBotKey = handleBotKey;
+window.cambiarTipoSubida = cambiarTipoSubida;
+window.mostrarNombreArchivo = mostrarNombreArchivo;
+window.subirTrabajoDashboard = subirTrabajoDashboard;
+window.renderizarTablaDashboard = renderizarTablaDashboard;
+window.eliminarTrabajoDashboard = eliminarTrabajoDashboard;
+window.cargarNombreEnInput = cargarNombreEnInput;
+window.guardarCambiosNombreDashboard = guardarCambiosNombreDashboard;
+
 // ==========================================
 // 8. INICIALIZACIÓN
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
-  // 1. Asignar el evento click a TODAS las espadas que existan en el DOM
-  const lightsabers = document.querySelectorAll('#glow-toggle, .lightsaber-toggle');
+  // Cargar primero de la base de datos de Firebase
+  cargarDesdeFirestore();
+
+  const lightsabers = document.querySelectorAll('#glow-toggle, .lightsaber-toggle, #glow-toggle-dash');
   lightsabers.forEach(saber => {
     saber.addEventListener('click', toggleRedTheme);
   });
 
-  // 2. Cargar preferencia guardada
   if (localStorage.getItem('theme') === 'red') {
     document.body.classList.add('red-theme', 'glow-red');
     lightsabers.forEach(saber => saber.classList.add('active'));
   }
 
-  // 3. Inicializar el resto del dashboard
   aplicarCambiosGuardadosUI();
   renderizarTablaDashboard();
   inicializarDragAndDrop();
@@ -646,7 +738,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const editSelect = document.getElementById('dashEditSelect');
   if (editSelect) cargarNombreEnInput();
 
-  // 4. Tecla Enter en formulario de Login
   const studentCode = document.getElementById('studentCode');
   const studentPass = document.getElementById('studentPass');
 
@@ -661,7 +752,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 5. Movimiento de luz del cursor
   const cursorGlow = document.getElementById('cursorGlow');
   if (cursorGlow) {
     window.addEventListener('mousemove', (e) => {
