@@ -338,7 +338,6 @@
         <button class="close-btn" onclick="closeLoginModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <!-- SE AGREGÓ EL EVENTO ONSUBMIT AQUÍ PARA PROCESAR EL ENTER -->
         <form id="adminLoginForm" autocomplete="off" onsubmit="event.preventDefault(); validarLogin();" style="display: flex; flex-direction: column; gap: 12px;">
           
           <div class="input-group" style="width: 100%;">
@@ -375,7 +374,6 @@
             </button>
           </div>
 
-          <!-- EL BOTÓN ES TIPO SUBMIT O MANTIENE EL CLIC DE VALIDACIÓN -->
           <button class="btn btn-submit" type="submit">INGRESAR</button>
           <button class="btn btn-back" type="button" onclick="closeLoginModal()">Volver al Frente ↺</button>
           
@@ -387,7 +385,8 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- CAMBIO AQUÍ: Se incluye el atributo type="module" -->
+  <script type="module" src="script.js"></script>
 
   <!-- FOOTER PIE DE PÁGINA -->
   <footer class="footer-bar">
@@ -499,7 +498,7 @@
           <input type="url" id="dashInputUrl" class="dash-input" placeholder="https://view.genially.com/..." autocomplete="off">
         </div>
 
-        <button type="button" class="btn btn-submit" onclick="subirTrabajoDashboard()" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 1rem;">
+        <button type="button" class="btn btn-submit" id="btnSubirDashboard" onclick="subirTrabajoDashboard()" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 1rem;">
           <i class="fa-solid fa-arrow-up-from-bracket"></i> Subir Trabajo
         </button>
       </div>
