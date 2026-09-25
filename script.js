@@ -73,14 +73,12 @@ const semanasInfoPredeterminadas = {
         actividad: 'ACTIVIDAD 01',
         pdfTitulo: 'Modelado Grados y Títulos',
         pdfRuta: 'https://drive.google.com/file/d/1ixM3PPgXK9feaUABpBB5dNy-jlMq8FqM/view?usp=sharing',
-        sqlRuta: 'https://drive.google.com/file/d/1Ruj3pEG7tOeME-mrFN859isBtd1nvv3F/view?usp=sharing',
         tipo: 'archivo'
       },
       {
         actividad: 'ACTIVIDAD 02',
         pdfTitulo: "Modelado Informático y Editorial",
         pdfRuta: "https://drive.google.com/file/d/14KDGbasof50GCrwo6mq7eUgK0UJdfZYE/view?usp=sharing",
-        sqlRuta: 'https://drive.google.com/file/d/1ESVYP5_0ODdxv3iSi_XDPJ_HNI7Ud6b6/view?usp=sharing',
         tipo: 'archivo'
       },
       {
