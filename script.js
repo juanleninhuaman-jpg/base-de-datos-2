@@ -88,6 +88,23 @@ const semanasInfoPredeterminadas = {
         tipo: 'archivo'
       }
     ]
+  },
+  'Semana 4': {
+    tituloSemana: 'Sustentación y Validación de la Infraestructura de Datos',
+    actividades: [
+      {
+        actividad: 'ACTIVIDAD 01',
+        pdfTitulo: 'Preguntas del Cuestionario 1-39',
+        pdfRuta: 'https://drive.google.com/file/d/1c2785BGKuErXfMNPsjTK_Pc5Ffcr82CO/view?usp=sharing',
+        tipo: 'archivo'
+      },
+      {
+        actividad: 'ACTIVIDAD 01',
+        pdfTitulo: "Informe de la Pregunta N° 40",
+        pdfRuta: "...",
+        tipo: 'archivo'
+      },
+    ]
   }
 };
 
