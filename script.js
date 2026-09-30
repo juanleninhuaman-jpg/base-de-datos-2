@@ -2,6 +2,23 @@
 // 0. CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
 // ==========================================
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDUBxcOogw_4kl907r8YCPGXGYBVi-7Gas",
+  authDomain: "base-de-datos-2-8f3af.firebaseapp.com",
+  projectId: "base-de-datos-2-8f3af",
+  storageBucket: "base-de-datos-2-8f3af.firebasestorage.app",
+  messagingSenderId: "170356526532",
+  appId: "1:170356526532:web:6cb0b3283a239ba0e46891",
+  measurementId: "G-WT433CHSMF"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
 // ==========================================
 // 1. ESTRUCTURA DE DATOS BASE Y NUBE/LOCALSTORAGE
