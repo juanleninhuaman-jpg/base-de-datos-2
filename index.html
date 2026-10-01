@@ -330,6 +330,27 @@
     </div>
   </div>
 
+  <!-- VISOR DE CÓDIGO SQL (mismo estilo neón del portafolio) -->
+  <div id="sqlModal" class="week-modal-overlay sql-overlay" onclick="if(event.target===this) closeSqlModal()">
+    <div class="week-modal-card sql-modal-card">
+      <div class="week-modal-header">
+        <div class="week-modal-title">
+          <span class="calendar-icon"><i class="fa-solid fa-database" style="color: var(--primary-color);"></i></span>
+          <h3 id="sqlModalTitle">Código SQL</h3>
+        </div>
+        <button class="week-modal-close" onclick="closeSqlModal()" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="sql-toolbar">
+        <span class="sql-file-tag"><i class="fa-solid fa-file-code"></i> <span id="sqlFileName">archivo.sql</span></span>
+        <div class="sql-toolbar-actions">
+          <button type="button" class="btn-card-action" id="sqlCopyBtn" onclick="copySqlCode()"><i class="fa-regular fa-copy"></i> Copiar</button>
+          <button type="button" class="btn-card-action" onclick="downloadSqlCode()"><i class="fa-solid fa-download"></i> Descargar .sql</button>
+        </div>
+      </div>
+      <pre class="sql-code-box"><code id="sqlCodeContent"></code></pre>
+    </div>
+  </div>
+
   <!-- MODAL DE INICIO DE SESIÓN -->
   <div id="loginModal" class="modal-overlay">
     <div class="login-card-centered">
@@ -419,7 +440,7 @@
           <span id="userDisplayCode">juanleninhuaman@gmail.com</span>
         </div>
         <span class="role-tag">ADMINISTRADOR</span>
-        <div id="glow-toggle-dash" class="lightsaber-vertical" onclick="toggleRedTheme()" title="Cambiar tema de color" style="cursor: pointer; position: relative; z-index: 99; display: inline-block;">
+        <div id="glow-toggle-dash" class="lightsaber-vertical" title="Cambiar tema de color" style="cursor: pointer; position: relative; z-index: 99; display: inline-block;">
           <div class="saber-blade-v" style="pointer-events: none;"></div>
           <div class="saber-hilt-v" style="pointer-events: none;"></div>
         </div>
