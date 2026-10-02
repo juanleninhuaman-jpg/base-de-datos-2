@@ -340,6 +340,7 @@
         </div>
         <button class="week-modal-close" onclick="closeSqlModal()" aria-label="Cerrar">✕</button>
       </div>
+      <div id="sqlTabs" class="sql-tabs" style="display:none;"></div>
       <div class="sql-toolbar">
         <span class="sql-file-tag"><i class="fa-solid fa-file-code"></i> <span id="sqlFileName">archivo.sql</span></span>
         <div class="sql-toolbar-actions">
@@ -571,6 +572,51 @@
 
         <button type="button" class="btn btn-submit" onclick="guardarCambiosNombreDashboard()" style="width: 100%; margin-top: 10px; padding: 12px;">
           <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+        </button>
+      </div>
+
+      <!-- CARD: CÓDIGO SQL POR ACTIVIDAD -->
+      <div class="dash-card" style="margin-top: 30px;">
+        <h2 class="dash-card-title"><i class="fa-solid fa-database"></i> Código SQL por Actividad</h2>
+        <p class="subtitle" style="margin-bottom: 15px;">Pega o carga tu código SQL: el botón <strong>Código SQL</strong> aparece en la actividad elegida. Si lo dejas vacío, el botón no se muestra.</p>
+
+        <div class="form-group">
+          <label class="dash-label">Semana:</label>
+          <select id="sqlAdmSemana" class="dash-select" onchange="refrescarSQLAdmin()">
+              <option value="Semana 1">Semana 1</option>
+              <option value="Semana 2">Semana 2</option>
+              <option value="Semana 3">Semana 3</option>
+              <option value="Semana 4" selected>Semana 4</option>
+              <option value="Semana 5">Semana 5</option>
+              <option value="Semana 6">Semana 6</option>
+              <option value="Semana 7">Semana 7</option>
+              <option value="Semana 8">Semana 8</option>
+              <option value="Semana 9">Semana 9</option>
+              <option value="Semana 10">Semana 10</option>
+              <option value="Semana 11">Semana 11</option>
+              <option value="Semana 12">Semana 12</option>
+              <option value="Semana 13">Semana 13</option>
+              <option value="Semana 14">Semana 14</option>
+              <option value="Semana 15">Semana 15</option>
+              <option value="Semana 16">Semana 16</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="dash-label">Actividad:</label>
+          <select id="sqlAdmActividad" class="dash-select" onchange="cargarScriptsSQLAdmin()"></select>
+        </div>
+
+        <p id="sqlAdmEstado" class="sql-adm-estado"></p>
+
+        <div id="sqlAdmScripts"></div>
+
+        <button type="button" class="type-btn" onclick="agregarSlotSQLAdmin()" style="width: 100%; margin-top: 10px;">
+          <i class="fa-solid fa-plus"></i> Agregar otro script
+        </button>
+
+        <button type="button" class="btn btn-submit" onclick="guardarCodigoSQLDashboard()" style="width: 100%; margin-top: 10px; padding: 12px;">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar Código SQL
         </button>
       </div>
 
