@@ -687,9 +687,9 @@ function botonesSemanasHTML(nums) {
 
 function botSelectOption(tipo) {
   if (tipo === 'conceptos') {
-    appendBotMessage('🗂️ Conceptos: Los DBMS (Sistemas Gestores) administran almacenamiento, seguridad e integridad de datos.');
+    botEnviar('¿Qué es una base de datos?');
   } else if (tipo === 'sql') {
-    appendBotMessage('&lt;/&gt; SQL: Lenguaje de consulta estructurado para definir (DDL) y manipular (DML) datos.');
+    botEnviar('¿Qué es SQL?');
   } else if (tipo === 'resumen') {
     const filas = [];
     for (let u = 1; u <= 4; u++) {
@@ -740,36 +740,556 @@ function botShowWeek(numSemana) {
   appendBotMessage(r);
 }
 
+// ==========================================
+// 5.1 CEREBRO CONVERSACIONAL DE R2-D2
+//     (sin servidores: funciona 100 % en tu página)
+// ==========================================
+const botCtx = { tema: null, modo: 'info', nombre: '', turnos: 0 };
+
+function botNorm(t) {
+  return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[¿?¡!.,;:()"-]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function botTiene(q, kw) {
+  const esc = kw.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&');
+  return new RegExp('(^|[^a-z0-9])' + esc + '(s|es)?([^a-z0-9]|$)').test(q);
+}
+
+function botCod(texto) {
+  return `<pre class="bot-code">${escaparHTML(texto)}</pre>`;
+}
+
+function botElegir(v) {
+  return Array.isArray(v) ? v[Math.floor(Math.random() * v.length)] : v;
+}
+
+// Semanas con contenido y actividades con SQL (datos reales del portafolio)
+function botSemanasConContenido() {
+  const out = [];
+  for (let n = 1; n <= 16; n++) if (semanaTieneContenido(n)) out.push(n);
+  return out;
+}
+
+function botActividadesConSQL() {
+  const lista = [];
+  botSemanasConContenido().forEach(n => {
+    const clave = `Semana ${n}`;
+    ((semanasInfo[clave] && semanasInfo[clave].actividades) || []).forEach((act, i) => {
+      const scripts = obtenerScriptsSQL(clave, act);
+      if (scripts.length > 0) lista.push({ semana: n, clave, idx: i, titulo: act.pdfTitulo, total: scripts.length });
+    });
+  });
+  return lista;
+}
+
+// ---------- BASE DE CONOCIMIENTO ----------
+const botTemas = [
+  // ===== Conversación básica =====
+  { id: 'saludo', claves: ['hola', 'buenas', 'buenos dias', 'buenas tardes', 'buenas noches', 'hey', 'saludos'],
+    info: () => botElegir([
+      `¡Hola${botCtx.nombre ? ' ' + botCtx.nombre : ''}! Beep-boop 🤖 Soy R2-D2, el asistente de este portafolio. Pregúntame sobre bases de datos o pídeme una recomendación.`,
+      `¡Hola${botCtx.nombre ? ' ' + botCtx.nombre : ''}! 🤖 ¿Quieres repasar algo de Base de Datos II o que te recomiende por dónde seguir?`
+    ]),
+    sug: ['¿Qué me recomiendas?', '¿Qué gestor uso?', 'Ayuda'] },
+  { id: 'gracias', claves: ['gracias', 'te agradezco', 'muchas gracias', 'thanks'],
+    info: () => botElegir(['¡De nada! Beep-boop 🤖 Aquí sigo si necesitas más.', '¡Con gusto! Si quieres, te recomiendo qué repasar después.']),
+    sug: ['¿Qué me recomiendas?'] },
+  { id: 'despedida', claves: ['chau', 'adios', 'hasta luego', 'nos vemos', 'bye', 'me voy'],
+    info: () => '¡Hasta pronto! 👋 Que te vaya excelente con tus bases de datos. Beep-boop.' },
+  { id: 'estado', claves: ['como estas', 'como andas', 'como te va', 'que haces'],
+    info: () => 'Todos mis circuitos funcionan al 100 % ⚡ ¿Y tú? Cuéntame qué tema de bases de datos quieres ver.',
+    sug: ['¿Qué me recomiendas?', 'Ayuda'] },
+  { id: 'quien', claves: ['quien eres', 'como te llamas', 'que eres', 'tu nombre', 'r2d2', 'r2'],
+    info: () => 'Soy <b>R2-D2</b> 🤖, el asistente del portafolio de <b>Juan Lenin Huaman Quispe</b> (Base de Datos II · UPLA). Converso de bases de datos y te recomiendo qué usar o estudiar.',
+    sug: ['Ayuda', '¿Qué me recomiendas?'] },
+  { id: 'autor', claves: ['juan', 'lenin', 'autor', 'creador', 'quien hizo', 'quien creo'],
+    info: () => 'Este portafolio es de <b>Juan Lenin Huaman Quispe</b>, estudiante de V ciclo de Ingeniería de Sistemas y Computación en la UPLA. Aquí presenta sus trabajos de Base de Datos II.' },
+  { id: 'chiste', claves: ['chiste', 'broma', 'chistoso', 'hazme reir'],
+    info: () => botElegir([
+      '¿Por qué el DBA dejó a su pareja? 💔 Porque tenía demasiadas relaciones <b>muchos a muchos</b>. Beep-boop.',
+      'Un SQL entra a un bar, ve dos mesas y pregunta: «¿puedo hacerles <b>JOIN</b>?» 🍻',
+      '¿Cuál es el colmo de una base de datos? Tener <b>NULL</b> ganas de trabajar. 😅'
+    ]) },
+  { id: 'ayuda', claves: ['ayuda', 'que puedes hacer', 'que sabes', 'opciones', 'menu', 'comandos', 'help'],
+    info: () => `Puedo conversar y recomendarte sobre:<br>• 🗄️ Qué es una base de datos, tipos y arquitectura<br>• 🧰 Gestores (SQL Server, MySQL, PostgreSQL…)<br>• 🎓 Tus casos: Grados y Títulos, Informático y Editorial<br>• 💻 SQL: SELECT, JOIN, GROUP BY…<br>• 🧱 Modelo físico, claves y restricciones<br>• 📐 Normalización y modelo E-R<br>• ⚡ Índices, transacciones, backups<br>• 📚 Qué semana o código SQL repasar<br>Escribe <i>"semana 3"</i> o <i>"unidad 1"</i> para ver tus archivos.`,
+    sug: ['¿Qué es una base de datos?', '¿Qué gestor me recomiendas?', 'Mis trabajos', '¿Cómo estudio mejor?'] },
+
+  // ===== Gestores =====
+  { id: 'sqlserver', claves: ['sql server', 'sqlserver', 'ssms', 'microsoft sql', 't sql', 'tsql', 'transact'],
+    info: () => '<b>Microsoft SQL Server</b> es el gestor que usas en este curso 🪟. Se administra con <b>SSMS</b> y usa T-SQL. Trae <b>IDENTITY</b>, esquemas (<code>CREATE SCHEMA</code>), procedimientos, triggers y buen soporte de seguridad y backups.',
+    reco: () => '✅ Para Base de Datos II te recomiendo <b>SQL Server Developer + SSMS</b>: es gratis para aprender y es justo lo que piden tus actividades. Practica con tus scripts de la Semana 3 y 4.',
+    cuando: 'si es para tu curso o un entorno Microsoft (es el que usas en las actividades)',
+    grupoReco: 'dbms',
+    por: () => 'Porque tus actividades y el cuestionario 1-40 están hechos en T-SQL (<code>TOP</code>, <code>IDENTITY</code>, <code>ISNULL</code>…). Usar el mismo motor evita errores de sintaxis.',
+    ejemplo: () => botCod("CREATE DATABASE MiBD;\nGO\nUSE MiBD;\nGO\nCREATE TABLE Cliente (\n  IdCliente INT IDENTITY(1,1) PRIMARY KEY,\n  Nombre VARCHAR(100) NOT NULL\n);"),
+    sug: ['¿Cómo lo instalo?', 'Ejemplo', '¿Y MySQL?', '¿Y PostgreSQL?'] },
+  { id: 'mysql', claves: ['mysql', 'mariadb'],
+    info: () => '<b>MySQL</b> es un gestor open source muy usado en la web (WordPress, hostings económicos). Es rápido y sencillo, aunque tiene menos funciones avanzadas de T-SQL.',
+    cuando: 'si harás una web o app sencilla con hosting económico',
+    grupoReco: 'dbms',
+    reco: () => '👍 Elige <b>MySQL</b> si harás una web o app sencilla con hosting económico. Para este curso, lo mejor sigue siendo SQL Server.',
+    sug: ['¿Qué gestor me recomiendas?', '¿Y PostgreSQL?'] },
+  { id: 'postgres', claves: ['postgres', 'postgresql'],
+    info: () => '<b>PostgreSQL</b> es un gestor open source muy robusto: cumple bien el estándar SQL, soporta JSON, funciones de ventana y extensiones.',
+    cuando: 'si quieres un proyecto serio, gratis y muy completo',
+    grupoReco: 'dbms',
+    reco: () => '👍 Elige <b>PostgreSQL</b> para proyectos serios sin pagar licencias. Si ya sabes SQL Server, migrar es fácil: casi todo cambia poco.',
+    sug: ['¿Qué gestor me recomiendas?', '¿Y MySQL?'] },
+  { id: 'oracle', claves: ['oracle', 'pl/sql', 'plsql'],
+    info: () => '<b>Oracle Database</b> es un gestor empresarial (bancos, grandes corporaciones) con PL/SQL, alta disponibilidad y mucha escalabilidad. Es potente, pero de licencia costosa.',
+    cuando: 'si tu empresa lo exige o necesitas escala corporativa',
+    grupoReco: 'dbms',
+    reco: () => '🏢 Te lo recomiendo solo si tu trabajo o empresa lo exige. Para aprender, SQL Server o PostgreSQL son más fáciles de instalar.',
+    sug: ['¿Qué gestor me recomiendas?'] },
+  { id: 'nosql', claves: ['nosql', 'mongo', 'mongodb', 'firebase', 'firestore', 'no relacional'],
+    info: () => 'Las bases <b>NoSQL</b> (MongoDB, Firestore…) guardan documentos flexibles en vez de tablas. Esta misma página usa <b>Firestore</b> para guardar tus semanas 🔥.',
+    cuando: 'si tus datos son flexibles o necesitas tiempo real',
+    grupoReco: 'dbms',
+    reco: () => '🤔 Usa <b>relacional</b> (SQL Server, PostgreSQL) cuando hay relaciones e integridad importantes: ventas, notas, trámites. Usa <b>NoSQL</b> para datos flexibles, tiempo real o prototipos rápidos.',
+    sug: ['¿Qué gestor me recomiendas?'] },
+  { id: 'dbms', claves: ['dbms', 'gestor', 'sgbd', 'motor', 'manejador', 'que base de datos', 'que gestor', 'que motor'],
+    info: () => 'Un <b>DBMS / SGBD</b> es el software que administra tus datos: almacenamiento, seguridad, integridad, concurrencia y respaldos. Los más usados: <b>SQL Server, MySQL, PostgreSQL y Oracle</b>.',
+    por: () => 'Porque cada gestor encaja mejor en un escenario: el costo, el hosting, el soporte y lo que pide tu curso o tu empresa cambian la mejor opción. Para <b>Base de Datos II</b>, SQL Server es la opción alineada con tus actividades.',
+    reco: () => `Mi recomendación según tu caso:<br>• 🎓 <b>Curso / UPLA:</b> SQL Server<br>• 🌐 <b>Web económica:</b> MySQL<br>• 🛠️ <b>Proyecto serio gratis:</b> PostgreSQL<br>• 🏢 <b>Corporativo:</b> Oracle o SQL Server<br>• ⚡ <b>Prototipo en tiempo real:</b> Firestore`,
+    obras: [/gestores|dbms/],
+    sug: ['¿Por qué SQL Server?', '¿Y PostgreSQL?', '¿Cómo lo instalo?'] },
+
+  // ===== Fundamentos de Base de Datos (según tus trabajos) =====
+  { id: 'tipos', claves: ['tipos de base', 'tipo de base', 'relacional', 'relacionales', 'jerarquica', 'clave valor', 'grafos', 'documental', 'oltp', 'olap', 'data warehouse'],
+    info: () => '📚 <b>Tipos de base de datos:</b><br>• <b>Relacional:</b> tablas + SQL (SQL Server, MySQL, PostgreSQL). Es el tipo que trabajas en el curso.<br>• <b>NoSQL:</b> documentos, clave-valor, columnas o grafos (MongoDB, Firestore).<br>• <b>OLTP:</b> operaciones diarias (ventas, trámites).<br>• <b>OLAP / Data Warehouse:</b> análisis de grandes volúmenes.',
+    reco: () => '✅ Para sistemas con relaciones e integridad (trámites, ventas, notas) elige <b>relacional</b>. Para datos flexibles o tiempo real, <b>NoSQL</b>. Para reportes pesados, un <b>almacén de datos</b>.',
+    sug: ['¿Qué gestor me recomiendas?', 'Tablas, filas y columnas'] },
+  { id: 'administracion', claves: ['administracion', 'administrador', 'administrar', 'dba'],
+    info: () => '🛠️ La <b>administración de base de datos</b> la hace el <b>DBA</b>: instala y configura el motor, crea bases y usuarios, define permisos, hace <b>backups</b>, monitorea el rendimiento (índices) y asegura que el servicio esté disponible. Es el tema de tu Semana 1.',
+    reco: () => '✅ Buenas prácticas de un DBA: backups probados, permisos mínimos, monitoreo de rendimiento y documentar la configuración.',
+    obras: [/administracion/],
+    sug: ['Backups y seguridad', 'Índices', '¿Cómo lo instalo?'] },
+  { id: 'arqbd', claves: ['arquitectura de base', 'arquitectura de bd', 'arquitectura de una base', 'niveles', 'nivel externo', 'nivel conceptual', 'nivel interno', 'ansi', 'independencia de datos'],
+    info: () => '🏛️ La <b>arquitectura de una base de datos</b> (ANSI/SPARC) tiene 3 niveles:<br>• <b>Externo:</b> lo que ve cada usuario (vistas).<br>• <b>Conceptual:</b> el modelo lógico completo (entidades y relaciones).<br>• <b>Interno:</b> cómo se guarda físicamente (archivos, índices).<br>Esto da <b>independencia de datos</b>: cambias el nivel físico sin romper las aplicaciones. Es la base de tu Semana 1 (selección de la arquitectura).',
+    reco: () => '✅ Para elegir arquitectura: <b>cliente-servidor en 3 capas</b> para aplicaciones web; <b>nube</b> si necesitas escalar rápido; <b>local</b> para aprender o si hay normas de datos estrictas.',
+    obras: [/arquitectura/],
+    sug: ['Arquitectura cliente-servidor', '¿Qué gestor me recomiendas?'] },
+  { id: 'tablas', claves: ['tabla', 'tablas', 'fila', 'filas', 'columna', 'columnas', 'registro', 'campo', 'atributo', 'tupla'],
+    info: () => '📋 En una base relacional los datos viven en <b>tablas</b>. Cada <b>fila</b> (registro o tupla) es un elemento, ej. un empleado; cada <b>columna</b> (campo o atributo) es una propiedad, ej. <code>Nombre</code> o <code>NIF</code>. Las tablas se enlazan con <b>claves primarias y foráneas</b>.',
+    ejemplo: () => botCod("-- Tabla Empleado (fila = 1 empleado)\nIdEmpleado | Nombre | Apellidos | NIF\n1          | Carlos | Ramirez   | NIF100001\n2          | Ana    | Flores    | NIF100002"),
+    sug: ['Ejemplo', 'Claves y restricciones', 'Modelo entidad-relación'] },
+  { id: 'diseno', claves: ['diseno de base', 'fases de diseno', 'fases del diseno', 'diseno de bd', 'fases', 'diseno', 'ciclo de vida', 'modelo conceptual', 'modelo logico', 'conceptual', 'logico', 'proceso del curso', 'etapas'],
+    info: () => '🧩 <b>Fases del diseño de una base de datos</b> y dónde las ves en tu portafolio:<br>1) <b>Requisitos y arquitectura</b> → Semana 1<br>2) <b>Despliegue del motor (DBMS)</b> → Semana 2<br>3) <b>Modelo conceptual → lógico → físico</b> → Semana 3 (Grados y Títulos, Informático y Editorial)<br>4) <b>Implementación, datos y validación</b> → Semana 4 (Cadena Editorial y cuestionario)',
+    reco: () => '✅ Sigue siempre ese orden: no escribas tablas en SQL sin antes tener claras las entidades y relaciones.',
+    sug: ['Modelo entidad-relación', 'Modelo físico', 'Mis trabajos'] },
+  { id: 'grados', claves: ['grados y titulos', 'grado y titulo', 'bachiller', 'titulo profesional', 'tesis', 'turnitin', 'antiplagio', 'jurado', 'sustentacion', 'trabajo de investigacion', 'reglamento', 'tramite', 'resolucion', 'asesor'],
+    info: () => '🎓 El caso <b>Grados y Títulos</b> (Semana 3, Act. 1) modela el trámite de bachiller y título en 4 esquemas:<br>• <b>Catalogo:</b> tipos y estados de trámite, líneas de investigación.<br>• <b>Academico:</b> facultad, programa, persona y docente.<br>• <b>Tramite:</b> pago, fotografía, trabajo de investigación, asesor, plan de tesis, informe final y resoluciones (Facultad y CU).<br>• <b>Evaluacion:</b> jurado y sustentación.<br>Son <b>21 tablas</b>. Aplica reglas del Reglamento, como <b>similitud ≤ 30 %</b> (Turnitin) con un <code>CHECK</code>, notas de 0 a 20 y jurado (Presidente, Secretario, Vocal, Suplente).',
+    reco: () => '✅ Para entenderlo bien: lee primero el <b>Reglamento</b> (Semana 2), luego mira el modelo y por último revisa el <b>código SQL</b> con el visor.',
+    por: () => 'Porque cada tabla y restricción del SQL nace de una regla del Reglamento: el CHECK de 30 % de similitud, los roles del jurado o la nota máxima de 20.',
+    ejemplo: () => botCod("CONSTRAINT CHK_Similitud_Antiplagio\n  CHECK (PorcentajeSimilitud >= 0.00\n     AND PorcentajeSimilitud <= 30.00)"),
+    obras: [/grados y titulos/, /reglamento/],
+    sug: ['Ejemplo', 'Mecanismos de integración', 'Empresa de material informático'] },
+  { id: 'empresa', claves: ['material informatico', 'empresa informatica', 'empresa de material', 'informatico', 'equipo', 'componente', 'equipocomponente', 'detalle de compra'],
+    info: () => '🖥️ La <b>Empresa de Material Informático</b> (Semana 3, Act. 2) tiene <b>8 tablas</b> en el esquema <code>Empresa</code>: Seccion, Empleado, Cliente, Equipo, Componente, EquipoComponente, Compra y DetalleCompra.<br>• Un equipo se arma con varios componentes: relación <b>N:M</b> resuelta con <code>EquipoComponente</code> (clave compuesta).<br>• <code>DetalleCompra</code> permite comprar equipos o componentes sueltos.',
+    reco: () => '✅ Es el mejor caso para practicar una <b>relación N:M</b> y los <b>CHECK</b> (precio ≥ 0, stock ≥ 0, cantidad > 0).',
+    ejemplo: () => botCod("CREATE TABLE Empresa.EquipoComponente (\n  IdEquipo INT NOT NULL,\n  IdComponente INT NOT NULL,\n  Cantidad INT NOT NULL DEFAULT 1,\n  CONSTRAINT PK_EquipoComponente\n    PRIMARY KEY (IdEquipo, IdComponente)\n);"),
+    obras: [/inform/],
+    sug: ['Ejemplo', 'Modelo entidad-relación', 'Caso Cadena Editorial'] },
+  { id: 'integridad', claves: ['mecanismos de integracion', 'mecanismo de integracion', 'integracion', 'integridad referencial', 'integridad de datos', 'integridad de entidad'],
+    info: () => '🔗 Los <b>mecanismos de integridad</b> mantienen los datos correctos y conectados:<br>• <b>Entidad:</b> PRIMARY KEY + NOT NULL.<br>• <b>Referencial:</b> FOREIGN KEY entre tablas.<br>• <b>Dominio:</b> tipos de dato, CHECK y DEFAULT.<br>• <b>Unicidad:</b> UNIQUE.<br>Ejemplos de tus modelos: <code>FK_Tramite_Persona</code>, <code>UQ_Persona_DNI</code>, <code>CHK_Sustentacion_Nota</code> (0 a 20) y <code>CHK_Equipo_Precio</code> (≥ 0).',
+    reco: () => '✅ Pon la regla en la base de datos (CHECK, FK, UNIQUE) y no solo en la aplicación: así ningún programa puede guardar datos inválidos.',
+    obras: [/mecanismo|integracion/],
+    sug: ['Claves y restricciones', 'Modelo físico'] },
+  { id: 'trabajos', claves: ['mis trabajos', 'trabajos', 'que trabajos', 'archivos', 'actividades', 'entregables', 'lo que subi', 'que subi', 'que he subido', 'pdf', 'pdfs'],
+    info: () => 'botListaTrabajos',
+    reco: () => 'botListaTrabajos',
+    sug: ['¿Cómo estudio mejor?', '¿Qué código SQL practico?'] },
+
+  { id: 'basedatos', claves: ['base de datos', 'bases de datos', 'bd', 'database', 'que es un dato', 'que son los datos', 'definicion de base'],
+    info: () => '🗄️ Una <b>base de datos</b> es un conjunto organizado de datos relacionados, guardados para consultarlos, actualizarlos y protegerlos de forma eficiente.<br><br>• <b>Dato:</b> hecho sin interpretar (ej. "Ana").<br>• <b>Información:</b> dato con significado (ej. "Ana trabaja en la sucursal 1").<br>• Se organiza en <b>tablas</b>, <b>filas</b> y <b>columnas</b> unidas por <b>claves</b>.<br>• La administra un <b>SGBD</b> (SQL Server, MySQL…).<br><br>En tu portafolio la aplicas en 3 casos: <b>Grados y Títulos</b>, <b>Empresa de Material Informático</b> y <b>Cadena Editorial</b>.',
+    reco: () => '✅ Para entender una base de datos, parte de un caso real como los tuyos: identifica las <b>entidades</b>, relaciónalas, créalas en SQL Server y consúltalas. Empieza con la <b>Cadena Editorial</b>, que es el caso más completo.',
+    obras: [/arquitectura de base/, /introduccion/],
+    sug: ['¿Qué es un DBMS?', 'Tipos de base de datos', 'Mis trabajos'] },
+
+  // ===== SQL =====
+  { id: 'joins', claves: ['join', 'inner join', 'left join', 'combinar tablas', 'unir tablas', 'relacionar tablas'],
+    info: () => 'Un <b>JOIN</b> combina filas de varias tablas por una columna relacionada. <b>INNER JOIN</b> trae solo coincidencias; <b>LEFT JOIN</b> trae todo lo de la izquierda aunque no tenga pareja.',
+    reco: () => '👉 Usa <b>INNER JOIN</b> cuando necesitas datos que sí se relacionan, y <b>LEFT JOIN + IS NULL</b> para encontrar lo que <i>no</i> tiene relación (ej. revistas sin artículos, pregunta 25 de tu cuestionario).',
+    ejemplo: () => botCod("SELECT r.Titulo, a.Titulo AS Articulo\nFROM Revista r\nLEFT JOIN Articulo a\n  ON a.IdRevista = r.IdRevista\nWHERE a.IdArticulo IS NULL;"),
+    sug: ['Ejemplo', 'GROUP BY y HAVING', '¿Qué código SQL practico?'] },
+  { id: 'agregacion', claves: ['group by', 'having', 'sum', 'avg', 'count', 'promedio', 'agrupar', 'agregacion', 'funciones de agregado'],
+    info: () => '<b>GROUP BY</b> agrupa filas y las funciones <b>COUNT, SUM, AVG, MIN, MAX</b> calculan por grupo. <b>HAVING</b> filtra los grupos ya calculados (WHERE filtra filas antes de agrupar).',
+    reco: () => '👉 Regla fácil: filtra filas con <b>WHERE</b>, filtra resultados agrupados con <b>HAVING</b>. Practícalo con las preguntas 14 a 20 del cuestionario.',
+    ejemplo: () => botCod("SELECT r.Titulo, AVG(e.EjemplaresVendidos) AS Prom\nFROM Revista r\nJOIN Ejemplar e ON e.IdRevista = r.IdRevista\nGROUP BY r.Titulo\nHAVING AVG(e.EjemplaresVendidos) > 5000;"),
+    sug: ['Ejemplo', 'JOIN', 'Funciones de ventana'] },
+  { id: 'ventana', claves: ['rank', 'ntile', 'over', 'funcion de ventana', 'funciones de ventana', 'window', 'row_number'],
+    info: () => 'Las <b>funciones de ventana</b> (RANK, NTILE, SUM() OVER) calculan sobre un conjunto de filas sin colapsarlas como GROUP BY. Sirven para rankings y acumulados.',
+    reco: () => '👉 Para rankings usa <b>RANK()</b>; para dividir en grupos (alto/medio/bajo) usa <b>NTILE(3)</b>; para acumulados <b>SUM() OVER (ORDER BY …)</b>. Mira las preguntas 29 a 32 del cuestionario.',
+    ejemplo: () => botCod("SELECT r.Titulo,\n  SUM(e.EjemplaresVendidos) AS Total,\n  RANK() OVER (ORDER BY SUM(e.EjemplaresVendidos) DESC) AS Pos\nFROM Revista r\nJOIN Ejemplar e ON e.IdRevista = r.IdRevista\nGROUP BY r.Titulo;"),
+    sug: ['Ejemplo', 'GROUP BY y HAVING'] },
+  { id: 'subconsulta', claves: ['subconsulta', 'subquery', 'anidada', 'consulta anidada'],
+    info: () => 'Una <b>subconsulta</b> es un SELECT dentro de otro. Se usa en WHERE, HAVING o como columna calculada, por ejemplo para comparar contra el promedio general.',
+    reco: () => '👉 Úsala cuando necesitas un valor intermedio (promedio general, máximo). Si se vuelve difícil de leer, prueba un <b>JOIN</b> o una <b>CTE</b> (<code>WITH</code>).',
+    sug: ['JOIN', 'Funciones de ventana'] },
+  { id: 'sql', claves: ['sql', 'consulta', 'select', 'query', 'ddl', 'dml', 'insert', 'update', 'delete'],
+    info: () => '<b>SQL</b> es el lenguaje de las bases relacionales: <b>DDL</b> define (CREATE, ALTER, DROP), <b>DML</b> manipula (INSERT, UPDATE, DELETE, SELECT), <b>DCL</b> da permisos (GRANT, REVOKE) y <b>TCL</b> controla transacciones (COMMIT, ROLLBACK).',
+    reco: () => '📚 Orden recomendado: 1) <b>SELECT/WHERE/ORDER BY</b>, 2) <b>JOIN</b>, 3) <b>GROUP BY/HAVING</b>, 4) <b>subconsultas</b>, 5) <b>funciones de ventana</b>. Practica con tu cuestionario 1-40.',
+    ejemplo: () => botCod("SELECT Nombre, Apellidos\nFROM Empleado\nWHERE IdSucursal = 1\nORDER BY Apellidos;"),
+    sug: ['JOIN', 'GROUP BY y HAVING', '¿Qué código SQL practico?'] },
+
+  // ===== Diseño =====
+  { id: 'claves', claves: ['clave primaria', 'primary key', 'pk', 'clave foranea', 'foreign key', 'fk', 'llave primaria', 'llave foranea', 'restriccion', 'constraint', 'unique', 'integridad', 'check'],
+    info: () => '<b>PRIMARY KEY</b> identifica cada fila de forma única; <b>FOREIGN KEY</b> enlaza con otra tabla y garantiza integridad referencial; <b>UNIQUE</b> evita duplicados; <b>CHECK</b> valida reglas (ej. Precio ≥ 0); <b>DEFAULT</b> da un valor inicial.',
+    reco: () => '✅ Buenas prácticas: usa <b>INT IDENTITY</b> como PK, nombra tus restricciones (<code>PK_</code>, <code>FK_</code>, <code>UQ_</code>, <code>CHK_</code>) y usa <b>CHECK</b> para reglas del negocio, como hiciste en tus modelos físicos.',
+    por: () => 'Nombrarlas facilita leer los errores y modificar o borrar la restricción después.',
+    ejemplo: () => botCod("CONSTRAINT PK_Cliente PRIMARY KEY (IdCliente),\nCONSTRAINT UQ_Cliente_NIF UNIQUE (NIF),\nCONSTRAINT CHK_Precio CHECK (Precio >= 0)"),
+    sug: ['Ejemplo', 'Modelo físico', 'Normalización'] },
+  { id: 'fisico', claves: ['modelo fisico', 'modelamiento fisico', 'modelado fisico', 'tipo de dato', 'tipos de datos', 'esquema', 'schema', 'create table', 'identity', 'autoincrement', 'modelamiento', 'modelado'],
+    info: () => 'El <b>modelo físico</b> convierte tu diseño lógico en tablas reales del gestor: tipos de datos, claves, restricciones, índices y <b>esquemas</b> para organizar objetos (ej. <code>Catalogo</code>, <code>Academico</code>, <code>Tramite</code> en tu Actividad 1).',
+    reco: () => '✅ Recomendaciones: elige el tipo más pequeño que alcance (<b>TINYINT</b> para catálogos, <b>INT</b> para entidades grandes), <b>DECIMAL(10,2)</b> para dinero, <b>VARCHAR</b> con longitud realista y separa por <b>esquemas</b>.',
+    ejemplo: () => botCod("CREATE SCHEMA Empresa;\nGO\nCREATE TABLE Empresa.Equipo (\n  IdEquipo INT IDENTITY(1,1) NOT NULL,\n  Precio DECIMAL(10,2) NOT NULL,\n  CONSTRAINT PK_Equipo PRIMARY KEY (IdEquipo)\n);"),
+    sug: ['Ejemplo', 'Claves y restricciones', 'Mecanismos de integración'] },
+  { id: 'normalizacion', claves: ['normalizacion', 'normalizar', '1fn', '2fn', '3fn', 'forma normal', 'formas normales', 'bcnf', 'redundancia'],
+    info: () => '<b>Normalizar</b> reduce la redundancia y evita anomalías. <b>1FN:</b> valores atómicos. <b>2FN:</b> sin dependencias parciales de la clave. <b>3FN:</b> sin dependencias transitivas.',
+    reco: () => '✅ Normaliza hasta <b>3FN</b> en sistemas transaccionales. Solo desnormaliza con un motivo claro de rendimiento, por ejemplo reportes pesados.',
+    sug: ['Modelo entidad-relación', 'Claves y restricciones'] },
+  { id: 'er', claves: ['entidad relacion', 'modelo er', 'diagrama er', 'cardinalidad', 'relacion muchos', 'n m', 'uno a muchos', 'erd', 'diagrama entidad', 'muchos a muchos'],
+    info: () => 'El <b>modelo entidad-relación</b> representa entidades, atributos y relaciones con su <b>cardinalidad</b> (1:1, 1:N, N:M). Una relación <b>N:M</b> se resuelve con una <b>tabla intermedia</b>, como <code>SucursalRevista</code> o <code>EquipoComponente</code> en tus actividades.',
+    reco: () => '✅ Pasos: 1) identifica entidades, 2) define claves, 3) fija cardinalidades, 4) resuelve N:M con tabla intermedia, 5) pasa al modelo físico.',
+    sug: ['Modelo físico', 'Normalización', 'Caso Cadena Editorial'] },
+  { id: 'indices', claves: ['indice', 'index', 'rendimiento', 'optimizar', 'optimizacion', 'lento', 'performance'],
+    info: () => 'Un <b>índice</b> acelera las búsquedas, como el índice de un libro 📖. Cuesta espacio y hace un poco más lentos los INSERT/UPDATE. SQL Server crea uno automático en cada PRIMARY KEY.',
+    reco: () => '✅ Indexa columnas de <b>FOREIGN KEY</b>, de <b>WHERE</b> frecuentes y de <b>JOIN</b>. No indexes todo ni columnas que casi no se consultan.',
+    ejemplo: () => botCod("CREATE INDEX IX_Articulo_IdRevista\n  ON Articulo (IdRevista);"),
+    sug: ['Ejemplo', 'Transacciones'] },
+  { id: 'programables', claves: ['vista', 'procedimiento almacenado', 'stored procedure', 'trigger', 'disparador', 'funcion almacenada', 'procedimientos'],
+    info: () => '<b>Vista:</b> consulta guardada como tabla virtual. <b>Procedimiento almacenado:</b> bloque de código reutilizable. <b>Trigger:</b> código que se ejecuta solo ante un INSERT/UPDATE/DELETE.',
+    reco: () => '✅ Vistas para simplificar reportes, procedimientos para lógica reutilizable y segura, triggers solo para auditoría o reglas que no se pueden hacer con restricciones.',
+    sug: ['Índices', 'Transacciones'] },
+  { id: 'transacciones', claves: ['transaccion', 'acid', 'commit', 'rollback', 'concurrencia'],
+    info: () => 'Una <b>transacción</b> agrupa operaciones que se ejecutan completas o no se ejecutan (<b>COMMIT / ROLLBACK</b>). Cumple <b>ACID</b>: Atomicidad, Consistencia, Aislamiento y Durabilidad.',
+    reco: () => '✅ Usa transacciones cuando varias tablas deben cambiar juntas (ej. una compra y su detalle). Mantenlas cortas para no bloquear a otros usuarios.',
+    ejemplo: () => botCod("BEGIN TRANSACTION;\n  INSERT INTO Compra (...) VALUES (...);\n  INSERT INTO DetalleCompra (...) VALUES (...);\nCOMMIT;"),
+    sug: ['Ejemplo', 'Backup'] },
+  { id: 'seguridad', claves: ['backup', 'respaldo', 'restaurar', 'seguridad', 'login', 'permisos', 'usuarios', 'roles'],
+    info: () => 'En SQL Server la seguridad usa <b>logins, usuarios y roles</b> con permisos GRANT/DENY. Los <b>backups</b> (completo, diferencial y de log) protegen tus datos ante fallos.',
+    reco: () => '✅ Haz <b>backup completo</b> periódico, guárdalo fuera del servidor, prueba restaurarlo y da a cada usuario solo los permisos mínimos.',
+    ejemplo: () => botCod("BACKUP DATABASE CadenaEditorial\n  TO DISK = 'D:\\Backups\\CadenaEditorial.bak';"),
+    sug: ['Ejemplo', 'Transacciones'] },
+  { id: 'arquitectura', claves: ['arquitectura', 'cliente servidor', 'capas', 'nube', 'on premise', 'cloud', 'azure', 'despliegue', 'infraestructura'],
+    info: () => 'La arquitectura típica es <b>cliente-servidor en 3 capas</b>: presentación, lógica de negocio y datos. El motor puede estar <b>on-premise</b> (tu servidor) o en la <b>nube</b> (Azure SQL, AWS RDS).',
+    reco: () => '✅ Para aprender: instala el motor <b>local</b>. Para producción: la <b>nube</b> da respaldos y escalabilidad automáticos; <b>on-premise</b> da más control y puede ser mejor si hay normas de datos estrictas.',
+    sug: ['¿Qué gestor me recomiendas?', '¿Cómo lo instalo?'] },
+  { id: 'instalacion', claves: ['instalar', 'instalacion', 'descargar', 'setup', 'configurar', 'entorno', 'instalo'],
+    info: () => 'Para instalar SQL Server: descarga <b>SQL Server Developer</b>, instala el motor y luego <b>SSMS</b>. Conéctate con <code>localhost</code> o <code>.\\SQLEXPRESS</code> y prueba con <code>SELECT @@VERSION;</code>',
+    reco: () => '✅ Instala <b>Developer</b> (gratis, completo) o <b>Express</b> si tu PC es modesta, y usa <b>SSMS</b> para administrar. Revisa el manual de instalación en tu Semana 2.',
+    obras: [/instalacion|manual/],
+    sug: ['Ver Semana 2', '¿Por qué SQL Server?'] },
+
+  // ===== Curso y recomendaciones del portafolio =====
+  { id: 'editorial', claves: ['cadena editorial', 'editorial', 'revista', 'revistas', 'caso de estudio', 'sucursal', 'periodista', 'articulo'],
+    info: () => '📰 La <b>Cadena Editorial</b> (Semana 4) tiene <b>8 tablas</b>: Sucursal, Empleado, Revista, SucursalRevista, Periodista, Artículo, SeccionFija y Ejemplar. Una sucursal publica varias revistas y una revista se publica en varias sucursales: relación <b>N:M</b> con <code>SucursalRevista</code>.<br>Tus scripts crean la base <code>CadenaEditorial</code>, cargan datos (20 sucursales, empleados, revistas, periodistas y artículos; 12 secciones fijas y 10 ejemplares) y resuelven <b>40 preguntas</b> de consulta.',
+    reco: () => '✅ Para dominarlo: crea la BD y las tablas, carga los datos (seeding) y resuelve las 40 preguntas del cuestionario en ese orden.',
+    obras: [/cadena editorial/, /cuestionario/, /editorial/],
+    sug: ['¿Qué código SQL practico?', 'Ver Semana 4'] },
+  { id: 'estudiar', claves: ['estudiar', 'aprender', 'ruta', 'plan de estudio', 'como empiezo', 'principiante', 'por donde', 'empezar', 'repasar', 'estudio mejor'],
+    info: () => 'botRutaEstudio',
+    reco: () => 'botRutaEstudio',
+    sug: ['¿Qué código SQL practico?', 'Ayuda'] },
+  { id: 'practica', claves: ['cuestionario', 'practicar', 'ejercicios', 'preguntas', 'practica', 'codigo sql', 'scripts', 'ejemplos de codigo'],
+    info: () => 'botCodigosSQL',
+    reco: () => 'botCodigosSQL',
+    sug: ['JOIN', 'GROUP BY y HAVING'] },
+  { id: 'semanas', claves: ['semana', 'semanas', 'curso', 'unidad', 'temario', 'portafolio', 'contenido', 'que hay'],
+    info: () => 'botListaSemanas',
+    reco: () => 'botListaSemanas',
+    sug: ['¿Cómo estudio mejor?'] }
+];
+
+// ---------- Respuestas dinámicas basadas en TU portafolio ----------
+function botListaSemanas() {
+  const nums = botSemanasConContenido();
+  if (nums.length === 0) return { html: 'Aún no hay semanas con contenido en el portafolio.' };
+  return {
+    html: `📚 Semanas con contenido: <b>${nums.map(n => 'S' + n).join(', ')}</b>. Toca una para ver sus archivos:`,
+    chips: nums.map(n => ({ label: `Semana ${n}`, fn: () => botShowWeek(n) }))
+  };
+}
+
+function botCodigosSQL() {
+  const lista = botActividadesConSQL();
+  if (lista.length === 0) {
+    return { html: '💻 Todavía no hay código SQL cargado en las actividades. Puedes agregarlo desde el panel de administrador.' };
+  }
+  return {
+    html: `💻 Te recomiendo practicar con el código SQL de tus propias actividades. Toca uno para abrirlo con su visor:`,
+    chips: lista.map(a => ({
+      label: `S${a.semana} · ${a.titulo.length > 26 ? a.titulo.slice(0, 24) + '…' : a.titulo}`,
+      fn: () => openSqlModal(a.clave, a.idx)
+    }))
+  };
+}
+
+function botRutaEstudio() {
+  const nums = botSemanasConContenido();
+  const ultima = nums.length ? nums[nums.length - 1] : null;
+  const conSQL = botActividadesConSQL();
+  let html = `🧭 <b>Ruta que te recomiendo:</b><br>1) Repasa el <b>modelo E-R</b> y la <b>normalización</b>.<br>2) Pasa al <b>modelo físico</b> (claves y restricciones).<br>3) Practica <b>SQL</b>: SELECT → JOIN → GROUP BY → ventanas.<br>4) Cierra con <b>índices, transacciones y backups</b>.`;
+  if (ultima) html += `<br><br>📌 Tu contenido más reciente es la <b>Semana ${ultima}</b>: buen punto para repasar.`;
+  if (conSQL.length) html += ` Y tienes ${conSQL.length} actividad${conSQL.length > 1 ? 'es' : ''} con código SQL para practicar.`;
+  const chips = [];
+  if (ultima) chips.push({ label: `Ver Semana ${ultima}`, fn: () => botShowWeek(ultima) });
+  return { html, chips };
+}
+
+
+// ---------- Trabajos subidos al portafolio (datos reales) ----------
+function botObras(patrones) {
+  const out = [];
+  botSemanasConContenido().forEach(n => {
+    const clave = `Semana ${n}`;
+    ((semanasInfo[clave] && semanasInfo[clave].actividades) || []).forEach((act, i) => {
+      if (patrones.some(p => p.test(botNorm(act.pdfTitulo)))) out.push({ semana: n, clave, idx: i, act });
+    });
+  });
+  return out;
+}
+
+function botChipsObras(patrones) {
+  const chips = [];
+  botObras(patrones).slice(0, 3).forEach(o => {
+    const t = o.act.pdfTitulo || 'Archivo';
+    chips.push({ label: `📄 S${o.semana} · ${t.length > 28 ? t.slice(0, 26) + '…' : t}`, fn: () => window.open(o.act.pdfRuta, '_blank', 'noopener') });
+    if (obtenerScriptsSQL(o.clave, o.act).length > 0) {
+      chips.push({ label: `💻 Código SQL S${o.semana}`, fn: () => openSqlModal(o.clave, o.idx) });
+    }
+  });
+  return chips;
+}
+
+const botPalabrasVacias = ['que', 'como', 'cual', 'cuales', 'para', 'sobre', 'tengo', 'hay', 'mis', 'una', 'uno', 'los', 'las', 'del', 'con', 'por', 'base', 'bases', 'datos', 'quiero', 'saber', 'dime', 'explicame', 'hablame', 'tema', 'trabajo', 'semana', 'unidad', 'modelado', 'preguntas'];
+
+function botBuscarObras(q) {
+  const palabras = q.split(' ').filter(w => w.length >= 4 && !botPalabrasVacias.includes(w));
+  if (palabras.length === 0) return [];
+  const hallados = [];
+  botSemanasConContenido().forEach(n => {
+    const clave = `Semana ${n}`;
+    ((semanasInfo[clave] && semanasInfo[clave].actividades) || []).forEach((act, i) => {
+      const titulo = botNorm(act.pdfTitulo);
+      const puntos = palabras.filter(w => titulo.includes(w.replace(/(es|s)$/, ''))).length;
+      if (puntos > 0) hallados.push({ semana: n, clave, idx: i, act, puntos });
+    });
+  });
+  return hallados.sort((a, b) => b.puntos - a.puntos).slice(0, 4);
+}
+
+function botListaTrabajos() {
+  const nums = botSemanasConContenido();
+  if (nums.length === 0) return { html: 'Aún no hay trabajos subidos al portafolio.' };
+  let html = '📂 <b>Trabajos de tu portafolio:</b><br>';
+  nums.forEach(n => {
+    const info = semanasInfo[`Semana ${n}`];
+    html += `<br><b>Semana ${n}</b>${info.tituloSemana ? ' · ' + escaparHTML(info.tituloSemana) : ''}<br>`;
+    (info.actividades || []).forEach(a => {
+      html += `• ${escaparHTML(a.pdfTitulo || 'Archivo')}${obtenerScriptsSQL(`Semana ${n}`, a).length ? ' 💻' : ''}<br>`;
+    });
+  });
+  html += '<br>💻 = tiene código SQL. Toca una semana para abrirla:';
+  return { html, chips: nums.map(n => ({ label: `Semana ${n}`, fn: () => botShowWeek(n) })) };
+}
+
+const botFuncionesDinamicas = { botListaSemanas, botCodigosSQL, botRutaEstudio, botListaTrabajos };
+
+function botEvaluar(v) {
+  const r = typeof v === 'function' ? v() : v;
+  const base = botElegir(r);
+  if (typeof base === 'string' && botFuncionesDinamicas[base]) return botFuncionesDinamicas[base]();
+  return { html: base };
+}
+
+// ---------- Detección de tema + recomendación ----------
+function botDetectarTema(q) {
+  let mejor = null, mejorPuntos = 0;
+  botTemas.forEach(t => {
+    let p = 0;
+    t.claves.forEach(k => { if (botTiene(q, k)) p += (k.length > 6 ? 2 : 1); });
+    if (p > mejorPuntos) { mejorPuntos = p; mejor = t; }
+  });
+  return mejor;
+}
+
+function botPideRecomendacion(q) {
+  return /recomien|recomend|sugier|sugerenc|aconsej|cual (es )?(el )?(mejor|me conviene|conviene)|que (me )?conviene|cual (usar|elegir|escoger|uso|elijo|escojo|debo)|que (uso|elijo|escojo|debo usar)|mejor opcion/.test(q);
+}
+
+function botMostrar(res, sug) {
+  appendBotMessage(res.html);
+  const chips = [];
+  (res.chips || []).forEach(c => chips.push(c));
+  (sug || []).forEach(s => chips.push({ label: s, fn: () => botEnviar(s), suave: true }));
+  if (chips.length) botChips(chips);
+}
+
+function botChips(lista) {
+  const box = document.getElementById('botMessages');
+  if (!box) return;
+  const cont = document.createElement('div');
+  cont.className = 'bot-chips';
+  lista.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'bot-week-btn' + (c.suave ? ' bot-chip-suave' : '');
+    b.textContent = c.label;
+    b.addEventListener('click', () => {
+      cont.querySelectorAll('button').forEach(x => { x.disabled = true; });
+      cont.classList.add('usado');
+      c.fn();
+    });
+    cont.appendChild(b);
+  });
+  box.appendChild(cont);
+  box.scrollTop = box.scrollHeight;
+}
+
+function botEscribiendo(on) {
+  const box = document.getElementById('botMessages');
+  if (!box) return;
+  const previo = document.getElementById('botTyping');
+  if (previo) previo.remove();
+  if (!on) return;
+  const d = document.createElement('div');
+  d.id = 'botTyping';
+  d.className = 'bot-msg msg-bot bot-typing';
+  d.innerHTML = '<span></span><span></span><span></span>';
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function botResponder(txt) {
+  const q = botNorm(txt);
+  botCtx.turnos++;
+
+  // Nombre
+  const mNombre = q.match(/(?:me llamo|mi nombre es)\s+([a-z]+)/);
+  if (mNombre) {
+    botCtx.nombre = mNombre[1].charAt(0).toUpperCase() + mNombre[1].slice(1);
+    appendBotMessage(`¡Mucho gusto, <b>${botCtx.nombre}</b>! 🤖 Cuéntame qué tema de bases de datos quieres ver o pídeme una recomendación.`);
+    botChips([{ label: '¿Qué me recomiendas?', fn: () => botEnviar('¿Qué me recomiendas?'), suave: true }, { label: 'Ayuda', fn: () => botEnviar('Ayuda'), suave: true }]);
+    return;
+  }
+
+  // Semana / unidad / resumen (datos reales)
+  const mSemana = q.match(/semana\s*(\d{1,2})/);
+  const mUnidad = q.match(/unidad\s*(\d)/);
+  if (mSemana && +mSemana[1] >= 1 && +mSemana[1] <= 16) { botShowWeek(+mSemana[1]); return; }
+  if (mUnidad && +mUnidad[1] >= 1 && +mUnidad[1] <= 4) {
+    const u = +mUnidad[1];
+    const nums = semanasDeUnidad(u);
+    appendBotMessage(nums.length > 0
+      ? `✅ Unidad ${u}: selecciona una semana:${botonesSemanasHTML(nums)}`
+      : `⚠️ La Unidad ${u} todavía no tiene semanas con contenido.`);
+    return;
+  }
+  if (/\bresumen\b/.test(q)) { botSelectOption('resumen'); return; }
+
+  const ctxTema = botCtx.tema ? botTemas.find(t => t.id === botCtx.tema) : null;
+  const pideReco = botPideRecomendacion(q);
+  let tema = botDetectarTema(q);
+
+  // Comparación entre 2 o más gestores (ej. "¿cuál es mejor, MySQL o PostgreSQL?")
+  const gestores = ['sqlserver', 'mysql', 'postgres', 'oracle', 'nosql']
+    .map(id => botTemas.find(t => t.id === id))
+    .filter(t => t.claves.some(k => botTiene(q, k)));
+  if (gestores.length >= 2) {
+    const nombres = { sqlserver: 'SQL Server', mysql: 'MySQL', postgres: 'PostgreSQL', oracle: 'Oracle', nosql: 'NoSQL' };
+    botCtx.tema = 'dbms';
+    botMostrar({
+      html: '⚖️ <b>Comparación rápida:</b><br>' +
+        gestores.map(g => `• <b>${nombres[g.id]}</b>: elígelo ${g.cuando}.`).join('<br>') +
+        '<br><br>Para <b>Base de Datos II</b> te recomiendo <b>SQL Server</b>; fuera del curso, depende de tu proyecto.'
+    }, ['¿Qué gestor me recomiendas?', '¿Cómo lo instalo?']);
+    return;
+  }
+
+  // Seguimientos: "por qué" y "ejemplo" (del tema actual o del que menciones)
+  const refTema = (tema && tema.id !== 'saludo') ? tema : ctxTema;
+  if (/^(y )?(por ?que|porque|y eso|como asi|a que se debe)/.test(q)) {
+    const t = (tema && tema.por) ? tema : (ctxTema && ctxTema.por ? ctxTema : null);
+    if (t) { botCtx.tema = t.id; botMostrar(botEvaluar(t.por), t.sug); return; }
+  }
+  if (/ejemplo|muestrame|demuestra|codigo de ejemplo|como se hace|como se escribe/.test(q)) {
+    const t = (tema && tema.ejemplo) ? tema : (refTema && refTema.ejemplo ? refTema : null);
+    if (t) {
+      botCtx.tema = t.id;
+      botMostrar({ html: 'Aquí tienes un ejemplo:' + botEvaluar(t.ejemplo).html }, t.sug);
+      return;
+    }
+  }
+
+  // Recomendación sin tema claro
+  if (!tema && pideReco) {
+    if (ctxTema && ctxTema.grupoReco) {
+      tema = botTemas.find(t => t.id === ctxTema.grupoReco);
+    } else if (ctxTema && ctxTema.reco) {
+      tema = ctxTema;
+    } else {
+      appendBotMessage('Con gusto te recomiendo 😊 ¿Sobre qué área?');
+      botChips([
+        { label: 'Gestor de BD', fn: () => botEnviar('¿Qué gestor me recomiendas?') },
+        { label: 'Qué estudiar', fn: () => botEnviar('¿Cómo estudio mejor?') },
+        { label: 'Código SQL', fn: () => botEnviar('¿Qué código SQL practico?') },
+        { label: 'Instalación', fn: () => botEnviar('¿Cómo lo instalo?') }
+      ]);
+      return;
+    }
+  }
+
+  if (!tema) {
+    const hallados = botBuscarObras(q);
+    if (hallados.length > 0) {
+      botMostrar({
+        html: '🔎 Encontré esto en tus trabajos del portafolio:',
+        chips: hallados.map(o => ({
+          label: `📄 S${o.semana} · ${(o.act.pdfTitulo || 'Archivo').length > 28 ? o.act.pdfTitulo.slice(0, 26) + '…' : o.act.pdfTitulo}`,
+          fn: () => window.open(o.act.pdfRuta, '_blank', 'noopener')
+        }))
+      }, ['Mis trabajos']);
+      return;
+    }
+    appendBotMessage(botElegir([
+      'Mmm, no estoy seguro de haberte entendido 🤔. Puedo hablar de gestores, SQL, claves, normalización, índices… o recomendarte qué estudiar.',
+      'Beep-boop, esa no la tengo clara 🤖. Prueba preguntarme por un tema (ej. "JOIN", "SQL Server") o escribe "ayuda".'
+    ]));
+    botChips([
+      { label: 'Ayuda', fn: () => botEnviar('Ayuda'), suave: true },
+      { label: '¿Qué me recomiendas?', fn: () => botEnviar('¿Qué me recomiendas?'), suave: true }
+    ]);
+    return;
+  }
+
+  // Responder
+  botCtx.tema = ['saludo', 'gracias', 'despedida', 'estado', 'chiste', 'autor', 'quien', 'ayuda'].includes(tema.id) ? botCtx.tema : tema.id;
+  const usaReco = (pideReco || /cual (es )?mejor|conviene/.test(q)) && tema.reco;
+  botCtx.modo = usaReco ? 'reco' : 'info';
+  const res = botEvaluar(usaReco ? tema.reco : tema.info);
+  if (tema.obras) res.chips = (res.chips || []).concat(botChipsObras(tema.obras));
+  botMostrar(res, tema.sug);
+}
+
+function botEnviar(txt) {
+  document.querySelectorAll('#botMessages .bot-chips').forEach(c => c.remove());
+  appendBotMessage(escaparHTML(txt), true);
+  botEscribiendo(true);
+  setTimeout(() => {
+    botEscribiendo(false);
+    botResponder(txt);
+  }, 450 + Math.floor(Math.random() * 450));
+}
+
 function sendBotUserMsg() {
   const input = document.getElementById('botInput');
   if (!input) return;
   const txt = input.value.trim();
   if (!txt) return;
-
-  appendBotMessage(escaparHTML(txt), true);
   input.value = '';
-
-  setTimeout(() => {
-    const query = txt.toLowerCase();
-    const mSemana = query.match(/semana\s*(\d{1,2})/);
-    const mUnidad = query.match(/unidad\s*(\d)/);
-
-    if (mSemana && parseInt(mSemana[1], 10) >= 1 && parseInt(mSemana[1], 10) <= 16) {
-      botShowWeek(parseInt(mSemana[1], 10));
-    } else if (mUnidad && parseInt(mUnidad[1], 10) >= 1 && parseInt(mUnidad[1], 10) <= 4) {
-      const u = parseInt(mUnidad[1], 10);
-      const nums = semanasDeUnidad(u);
-      appendBotMessage(nums.length > 0
-        ? `✅ Unidad ${u}: selecciona una semana:${botonesSemanasHTML(nums)}`
-        : `⚠️ La Unidad ${u} todavía no tiene semanas con contenido.`);
-    } else if (query.includes('resumen')) {
-      botSelectOption('resumen');
-    } else if (query.includes('hola') || query.includes('buenas')) {
-      appendBotMessage('¡Hola! Beep-boop 🤖 ¿En qué te puedo colaborar hoy?');
-    } else {
-      appendBotMessage('Procesando consulta... Prueba escribiendo "semana 3" o "unidad 1", o explora las opciones de las unidades.');
-    }
-  }, 600);
+  botEnviar(txt);
 }
 
 function handleBotKey(e) {
