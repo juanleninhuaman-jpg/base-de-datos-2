@@ -1730,3 +1730,55 @@ body.glow-red .sql-tab.active { color: #ffffff; }
 }
 .bot-week-btn:hover { background: var(--primary-color); color: #020814; }
 body.glow-red .bot-week-btn:hover { color: #ffffff; }
+
+
+/* ==========================================================================
+   CONVERSACIÓN DEL BOT: código, sugerencias y "escribiendo..."
+   ========================================================================== */
+.bot-msg code {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.82em;
+  color: var(--primary-color, #00f2fe);
+}
+.bot-msg .bot-code {
+  background: #020814;
+  border: 1px solid var(--primary-color, #00f2fe);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 6px 0 0;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: #e0e0e0;
+  white-space: pre;
+}
+.bot-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-self: flex-start;
+  max-width: 95%;
+  margin: -2px 0 4px;
+}
+.bot-chips .bot-week-btn { border-radius: 14px; padding: 4px 10px; }
+.bot-chips .bot-chip-suave { opacity: 0.85; border-style: dashed; }
+.bot-chips.usado { opacity: 0.45; }
+.bot-typing { display: inline-flex; gap: 4px; align-items: center; padding: 10px 14px; }
+.bot-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary-color, #00f2fe);
+  animation: botDot 1s infinite ease-in-out;
+}
+.bot-typing span:nth-child(2) { animation-delay: 0.15s; }
+.bot-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes botDot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
